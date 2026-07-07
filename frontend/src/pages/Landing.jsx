@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
 export default function Landing() {
+  const scrollToFeatures = () => {
+    document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
       {/* Top Navigation */}
@@ -15,7 +19,7 @@ export default function Landing() {
             <span className="font-headline-md text-headline-md font-bold text-primary">CivicSathi AI</span>
           </div>
           <nav className="hidden md:flex gap-8">
-            <a className="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Features</a>
+            <a className="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#features">Features</a>
             <a className="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">How it Works</a>
             <a className="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Pricing</a>
           </nav>
@@ -50,13 +54,13 @@ export default function Landing() {
                 Get Started Free
                 <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </Link>
-              <button className="bg-surface text-primary border border-outline-variant px-8 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-all transform hover:scale-[0.98] flex items-center justify-center gap-2">
+              <button onClick={scrollToFeatures} className="bg-surface text-primary border border-outline-variant px-8 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-all transform hover:scale-[0.98] flex items-center justify-center gap-2">
                 Learn More
               </button>
             </div>
           </div>
           {/* Hero Dashboard Mockup (Bento/Glass) */}
-          <div className="mt-xl w-full max-w-5xl z-10 relative">
+          <section id="features" aria-label="Features" className="mt-xl w-full max-w-5xl z-10 relative scroll-mt-24">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-secondary-container/20 rounded-xl blur-xl"></div>
             <div className="glass-card rounded-xl p-md border border-white/60 relative overflow-hidden flex flex-col md:flex-row gap-gutter">
               {/* Left Panel: AI Summary */}
@@ -93,7 +97,7 @@ export default function Landing() {
                 </div>
               </div>
             </div>
-          </div>
+          </section>
         </section>
       </main>
       <footer className="bg-surface-container-lowest border-t border-surface-variant py-md px-gutter mt-auto">

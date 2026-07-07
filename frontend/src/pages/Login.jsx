@@ -9,7 +9,7 @@ export default function Login() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (user) navigate("/", { replace: true });
+    if (user) navigate("/dashboard", { replace: true });
   }, [user, navigate]);
 
   const handleLogin = async () => {
