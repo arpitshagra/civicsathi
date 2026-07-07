@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { getLanguage, setLanguage } from "../lib/apiClient";
 
 const NAV = [
-  { to: "/", label: "Dashboard", icon: "dashboard", end: true },
+  { to: "/dashboard", label: "Dashboard", icon: "dashboard", end: true },
   { to: "/assistant", label: "AI Assistant", icon: "smart_toy" },
   { to: "/schemes", label: "Scheme Finder", icon: "search_check" },
   { to: "/checklist", label: "Doc Checklist", icon: "checklist" },

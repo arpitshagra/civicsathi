@@ -1,4 +1,4 @@
-// Router. Public: /landing, /login. Protected pages share <Layout/> (Sidebar).
+// Router. Public: /, /landing, /login. Protected pages share <Layout/> (Sidebar).
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -20,6 +20,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* Public */}
+          <Route path="/" element={<Landing />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login />} />
 
@@ -31,7 +32,7 @@ export default function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/assistant" element={<Assistant />} />
             <Route path="/schemes" element={<SchemeFinder />} />
             <Route path="/checklist" element={<Checklist />} />
