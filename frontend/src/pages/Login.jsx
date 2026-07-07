@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import logo from "../assets/civicsathi-logo.png";
 
 export default function Login() {
   const { user, login } = useAuth();
@@ -31,9 +32,7 @@ export default function Login() {
         <div className="glass-card rounded-xl p-md md:p-lg flex flex-col items-center text-center space-y-md">
           {/* Brand */}
           <div className="mb-sm">
-            <div className="w-[80px] h-[80px] mx-auto rounded-2xl bg-primary-container flex items-center justify-center text-primary text-3xl font-bold drop-shadow-sm">
-              CS
-            </div>
+            <img src={logo} alt="CivicSathi AI logo" className="w-[80px] h-[80px] mx-auto object-contain drop-shadow-sm" />
           </div>
 
           <div className="space-y-base w-full">

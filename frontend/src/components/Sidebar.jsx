@@ -4,6 +4,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getLanguage, setLanguage } from "../lib/apiClient";
+import logo from "../assets/civicsathi-logo.png";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: "dashboard", end: true },
@@ -32,9 +33,7 @@ export default function Sidebar() {
     <nav className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low shadow-md z-40 border-r border-outline-variant/30 p-4">
       {/* Brand */}
       <div className="mb-8 flex items-center gap-3 px-2">
-        <div className="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-primary font-bold">
-          CS
-        </div>
+        <img src={logo} alt="CivicSathi AI logo" className="w-10 h-10 object-contain" />
         <div>
           <h1 className="font-headline-md text-headline-md font-bold text-primary">CivicSathi</h1>
           <p className="font-label-sm text-label-sm text-on-surface-variant">Administrative AI</p>
