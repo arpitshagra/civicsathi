@@ -29,6 +29,26 @@ def ai_generate(
     temperature: Optional[float] = None,
     max_tokens: Optional[int] = None,
 ) -> dict:
+    system_prompt = system_prompt + prompts.language_directive(_current_language())
+
+    try:
+        return groq_service.generate_json(
+            system_prompt,
+            user_prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+
+    except groq_service.GroqUnavailableError as exc:
+        raise APIError("AI service is not configured.", 503, "AI_UNAVAILABLE") from exc
+
+    except groq_service.GroqResponseError as exc:
+        raise APIError("AI service returned an invalid response.", 502, "AI_ERROR") from exc
+
+    except Exception:
+        import traceback
+        traceback.print_exc()
+        raise
     """Generate a JSON object from Groq, mapping failures to APIError.
 
     Appends a language directive so all human-readable output honours the
