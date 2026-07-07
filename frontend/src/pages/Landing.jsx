@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/civicsathi-logo.png";
 
 export default function Landing() {
   const scrollToFeatures = () => {
@@ -14,7 +15,7 @@ export default function Landing() {
             <img
               alt="CivicSathi AI Logo"
               className="h-8 w-8 rounded-md object-contain"
-              src="https://lh3.googleusercontent.com/aida/AP1WRLuLsHCrtDhpDKXiW-vMf6qNQVp2CafMtZ_vi6CUDWEEekrDobDqe2hJhrKUC8nAFJRFo4ULFHrB5DcsYrMKTOeqNrSt2Oh0tGNreKfxHY8FjDLq_W9Jq4iaAuTvb1Qf2qG4RJiZxju-XDdIlqV8QZe16StgXBmSxlY5k_6hOK_XzGIWAAiXnSKpnVCQYVBhTphKhsBGnzypJB04DFVMWtftJoRuVN4_5fk4TlC7JK-L9sfFBrH7tpuiyNQ"
+              src={logo}
             />
             <span className="font-headline-md text-headline-md font-bold text-primary">CivicSathi AI</span>
           </div>
@@ -106,9 +107,9 @@ export default function Landing() {
             <img
               alt="CivicSathi Logo"
               className="h-6 w-6 rounded object-contain grayscale opacity-60"
-              src="https://lh3.googleusercontent.com/aida/AP1WRLuLsHCrtDhpDKXiW-vMf6qNQVp2CafMtZ_vi6CUDWEEekrDobDqe2hJhrKUC8nAFJRFo4ULFHrB5DcsYrMKTOeqNrSt2Oh0tGNreKfxHY8FjDLq_W9Jq4iaAuTvb1Qf2qG4RJiZxju-XDdIlqV8QZe16StgXBmSxlY5k_6hOK_XzGIWAAiXnSKpnVCQYVBhTphKhsBGnzypJB04DFVMWtftJoRuVN4_5fk4TlC7JK-L9sfFBrH7tpuiyNQ"
+              src={logo}
             />
-            <span className="font-label-sm text-label-sm text-on-surface-variant">© 2024 CivicSathi AI. All rights reserved.</span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant">&copy; 2026 CivicSathi AI. Crafted by Arpit Sharma.</span>
           </div>
           <div className="flex gap-6">
             <a className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
