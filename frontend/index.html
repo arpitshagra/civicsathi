@@ -1,0 +1,204 @@
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CivicSathi AI</title>
+    <meta
+      name="description"
+      content="CivicSathi AI — discover government schemes, prepare documents, simplify notifications, and report civic issues."
+    />
+
+    <!-- Tailwind (CDN) + Stitch design tokens -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary": "#ffffff",
+              background: "#f9f9ff",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#056a00",
+              "surface-dim": "#d3daea",
+              "surface-container-high": "#e2e8f8",
+              "outline-variant": "#c3c6d6",
+              "on-tertiary-fixed-variant": "#035300",
+              "on-surface-variant": "#434654",
+              outline: "#737685",
+              "on-error-container": "#93000a",
+              "on-primary-fixed-variant": "#0040a2",
+              "secondary-fixed": "#ffdcc2",
+              "inverse-on-surface": "#ebf1ff",
+              primary: "#003d9b",
+              "surface-container-highest": "#dce2f3",
+              "on-primary-container": "#c4d2ff",
+              "surface-container-low": "#f0f3ff",
+              "on-tertiary-fixed": "#012200",
+              "secondary-container": "#fe9832",
+              "primary-fixed": "#dae2ff",
+              "surface-bright": "#f9f9ff",
+              "tertiary-fixed": "#8dfc75",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#72de5c",
+              "on-background": "#151c27",
+              "surface-container": "#e7eefe",
+              secondary: "#8f4e00",
+              "secondary-fixed-dim": "#ffb77a",
+              "on-secondary-container": "#683700",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#2e1500",
+              "surface-tint": "#0c56d0",
+              error: "#ba1a1a",
+              "inverse-surface": "#2a313d",
+              "primary-fixed-dim": "#b2c5ff",
+              "surface-variant": "#dce2f3",
+              "on-error": "#ffffff",
+              "inverse-primary": "#b2c5ff",
+              "primary-container": "#0052cc",
+              surface: "#f9f9ff",
+              "on-surface": "#151c27",
+              "on-secondary-fixed-variant": "#6d3a00",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-container": "#7eeb67",
+              "on-primary-fixed": "#001848",
+              tertiary: "#034f00",
+            },
+            borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+            spacing: {
+              lg: "48px", xl: "80px", sm: "12px", gutter: "24px",
+              "margin-mobile": "16px", xs: "4px", base: "8px",
+              "margin-desktop": "64px", md: "24px",
+            },
+            fontFamily: {
+              "headline-lg-mobile": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"],
+              "body-md": ["Inter"], "headline-lg": ["Inter"], "display-lg": ["Inter"],
+              "label-md": ["Inter"], "headline-md": ["Inter"],
+            },
+            fontSize: {
+              "headline-lg-mobile": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.03em", fontWeight: "600" }],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600" }],
+              "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+              "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "500" }],
+              "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Global Stitch helper styles (theme() calls resolved to hex) -->
+    <style>
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f9f9ff;
+        color: #151c27;
+      }
+      .material-symbols-outlined {
+        font-family: "Material Symbols Outlined";
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-feature-settings: "liga";
+        -webkit-font-smoothing: antialiased;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .ambient-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); }
+      .hover-scale { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+      .hover-scale:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06); }
+      .ai-glow { box-shadow: 0 0 40px rgba(0, 61, 155, 0.1); }
+      .ai-tint-bg { background-color: rgba(0, 61, 155, 0.03); }
+      .hero-gradient { background: radial-gradient(circle at 50% -20%, #ebf1ff 0%, #f9f9ff 100%); }
+      .ai-glass-card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 243, 255, 0.8) 100%);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid #b2c5ff;
+        box-shadow: 0 8px 32px rgba(0, 61, 155, 0.08);
+      }
+      .ai-border {
+        border: 1px solid transparent;
+        background: linear-gradient(#dce2f3, #dce2f3) padding-box,
+          linear-gradient(to right, #003d9b, #fe9832) border-box;
+      }
+      .ai-gradient-border {
+        position: relative;
+        background: linear-gradient(to right, #f9f9ff, #f9f9ff);
+        background-clip: padding-box;
+        border: 1px solid transparent;
+      }
+      .ai-gradient-border::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        margin: -1px;
+        border-radius: inherit;
+        background: linear-gradient(135deg, #003d9b, #fe9832);
+      }
+      .ai-summary-border { position: relative; }
+      .ai-summary-border::before {
+        content: "";
+        position: absolute;
+        top: -1px; left: -1px; right: -1px; bottom: -1px;
+        background: linear-gradient(135deg, #003d9b, #8dfc75);
+        z-index: -1;
+        border-radius: calc(0.75rem + 1px);
+      }
+      .ai-summary-bg {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(12px);
+        border-radius: 0.75rem;
+      }
+      .shimmer {
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite linear;
+      }
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+      .ai-pulse { animation: aiPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1); }
+      @keyframes aiPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #ffffff; }
+      ::-webkit-scrollbar-thumb { background: #c3c6d6; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #737685; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

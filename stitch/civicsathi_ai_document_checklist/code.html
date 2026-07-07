@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CivicSathi AI - Document Checklist Generator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#056a00",
+                        "surface-dim": "#d3daea",
+                        "surface-container-high": "#e2e8f8",
+                        "outline-variant": "#c3c6d6",
+                        "on-tertiary-fixed-variant": "#035300",
+                        "on-surface-variant": "#434654",
+                        "outline": "#737685",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "secondary-fixed": "#ffdcc2",
+                        "inverse-on-surface": "#ebf1ff",
+                        "primary": "#003d9b",
+                        "surface-container-highest": "#dce2f3",
+                        "on-primary-container": "#c4d2ff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-tertiary-fixed": "#012200",
+                        "secondary-container": "#fe9832",
+                        "primary-fixed": "#dae2ff",
+                        "surface-bright": "#f9f9ff",
+                        "tertiary-fixed": "#8dfc75",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#72de5c",
+                        "on-background": "#151c27",
+                        "surface-container": "#e7eefe",
+                        "secondary": "#8f4e00",
+                        "secondary-fixed-dim": "#ffb77a",
+                        "on-secondary-container": "#683700",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#2e1500",
+                        "surface-tint": "#0c56d0",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2a313d",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-variant": "#dce2f3",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b2c5ff",
+                        "primary-container": "#0052cc",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#151c27",
+                        "on-secondary-fixed-variant": "#6d3a00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#7eeb67",
+                        "on-primary-fixed": "#001848",
+                        "tertiary": "#034f00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "48px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "margin-desktop": "64px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .ai-gradient-border {
+            position: relative;
+            background: linear-gradient(to right, theme('colors.surface'), theme('colors.surface'));
+            background-clip: padding-box;
+            border: 1px solid transparent;
+        }
+        .ai-gradient-border::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -1;
+            margin: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, theme('colors.primary'), theme('colors.secondary-container'));
+        }
+        .ai-tint-bg {
+            background-color: rgba(0, 61, 155, 0.03); /* primary color with very low opacity */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-xl shadow-sm">
+<div class="flex justify-between items-center px-6 py-3 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">assured_workload</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">CivicSathi AI</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<!-- Navigation Items -->
+<nav class="flex gap-6">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-2" href="#">
+                        Dashboard
+                    </a>
+<a class="text-primary font-bold border-b-2 border-primary font-label-md text-label-md flex items-center gap-2 py-2" href="#">
+                        Document Vault
+                    </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-2" href="#">
+                        Scheme Finder
+                    </a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors hover:scale-95 duration-150 p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors hover:scale-95 duration-150 p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-primary-container overflow-hidden ml-2 cursor-pointer hover:scale-95 transition-transform duration-150 shadow-sm">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Professional headshot of an Indian citizen, neutral corporate lighting, modern minimalist background, subtle royal blue accent lighting, high resolution, soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiAmVevLn89n6U02QJEklvy5rGoO51vc4vvK1r_13kQ6hREbwXHZ1VIuVORLLsv8D60ZIrYhZUob6cHC4OkiNvQkA0bnM9GdpTicdSj7ekF0I5KOORoT_38GPgvq0BMn2TLJ20eMEUE618BS10Jbqycxjhau9RnXe6nDtgBap3X7N9aH1tryT8VNOFbYhew256wYDi9a7DZk6jqsEnsGJXK_clNzOdl_wa0BNAtoLHsp4OKUFBTYNOiw"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface dark:bg-surface-container-low shadow-md z-40 pt-[72px]">
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-3 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm mb-6 mt-2 active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                New Application
+            </button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined">search_check</span>
+                    Scheme Finder
+                </a>
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container rounded-lg px-4 py-3 font-label-md text-label-md font-semibold transition-transform active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+                    Document Vault
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+                    Grievance Cell
+                </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+                    AI Assistant
+                </a>
+</div>
+</div>
+<div class="p-4 border-t border-outline-variant/30 flex flex-col gap-1 bg-surface-container-low dark:bg-surface-container">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+                Help Center
+            </a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-[88px] pb-[96px] md:pb-lg px-margin-mobile md:pl-[280px] md:pr-margin-desktop w-full max-w-[1536px] mx-auto min-h-screen flex flex-col">
+<!-- Header Section -->
+<div class="mb-lg">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Document Checklist Generator</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">Instantly generate precise, up-to-date document requirements for any Indian government service. Powered by CivicSathi AI.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter flex-1">
+<!-- Left Column: Input & Presets -->
+<div class="lg:col-span-5 flex flex-col gap-md">
+<!-- Search Input Card -->
+<div class="bg-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/20 p-6 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 pointer-events-none"></div>
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">search</span>
+                        Find Service
+                    </h2>
+<div class="relative mt-2">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">assignment</span>
+</div>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-lowest border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md placeholder-outline text-on-surface shadow-sm" placeholder="e.g., New Passport, Domicile Certificate..." type="text"/>
+<button class="absolute inset-y-2 right-2 px-4 bg-primary text-on-primary rounded-md font-label-md text-label-md hover:bg-primary-container transition-colors active:scale-95">
+                            Generate
+                        </button>
+</div>
+</div>
+<!-- Presets Bento -->
+<div>
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-3 uppercase tracking-wider">Quick Select</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-surface rounded-lg border border-outline-variant/30 p-4 flex flex-col items-start gap-3 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-primary/40 transition-all text-left group">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">flight_takeoff</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Passport Issuance</span>
+</button>
+<button class="bg-surface rounded-lg border border-outline-variant/30 p-4 flex flex-col items-start gap-3 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-primary/40 transition-all text-left group ring-2 ring-primary/20 bg-primary/5">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-on-primary">drive_eta</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-semibold">Driving Licence</span>
+</button>
+<button class="bg-surface rounded-lg border border-outline-variant/30 p-4 flex flex-col items-start gap-3 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-primary/40 transition-all text-left group">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">credit_card</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">PAN Card</span>
+</button>
+<button class="bg-surface rounded-lg border border-outline-variant/30 p-4 flex flex-col items-start gap-3 hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-primary/40 transition-all text-left group">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">child_care</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Birth Certificate</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Results Canvas -->
+<div class="lg:col-span-7">
+<!-- Generated Checklist Result Card (Glassmorphism & AI styling) -->
+<div class="ai-gradient-border rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] bg-surface/90 backdrop-blur-md overflow-hidden flex flex-col h-full relative">
+<!-- AI Badge & Header -->
+<div class="ai-tint-bg p-6 border-b border-outline-variant/20 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2 bg-surface-container-lowest border border-primary/20 rounded-full px-3 py-1 shadow-sm w-max">
+<span class="material-symbols-outlined text-primary text-[16px]">auto_awesome</span>
+<span class="font-label-sm text-label-sm text-primary">AI Verified Checklist</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors" title="Print">
+<span class="material-symbols-outlined">print</span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">bookmark_add</span>
+                                    Save
+                                </button>
+</div>
+</div>
+<div>
+<h2 class="font-display-lg text-headline-lg text-on-surface mb-1">New Driving Licence</h2>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+                                Ministry of Road Transport and Highways (MoRTH)
+                            </p>
+</div>
+<!-- Info Pills -->
+<div class="flex flex-wrap gap-3 mt-2">
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-md border border-outline-variant/30">
+<span class="material-symbols-outlined text-outline text-[18px]">schedule</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Est. 15-30 Days</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-md border border-outline-variant/30">
+<span class="material-symbols-outlined text-outline text-[18px]">payments</span>
+<span class="font-label-md text-label-md text-on-surface-variant">₹200 - ₹500 (Varies by State)</span>
+</div>
+</div>
+</div>
+<!-- Checklist Content -->
+<div class="p-6 flex-1 overflow-y-auto flex flex-col gap-8">
+<!-- Required Documents Section -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-error">asterisk</span>
+                                Mandatory Documents
+                            </h3>
+<div class="flex flex-col gap-3">
+<!-- Doc Item 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 flex gap-4 items-start shadow-sm hover:border-primary/30 transition-colors">
+<div class="mt-0.5">
+<div class="w-5 h-5 rounded border border-outline flex items-center justify-center bg-surface cursor-pointer hover:border-primary"></div>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold mb-1">Age Proof (Any One)</h4>
+<ul class="font-body-sm text-label-sm text-on-surface-variant list-disc pl-4 space-y-1">
+<li>Birth Certificate</li>
+<li>PAN Card</li>
+<li>10th Class Marksheet</li>
+<li>Passport</li>
+</ul>
+</div>
+<span class="bg-secondary-container/20 text-secondary border border-secondary/20 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide">Original Required</span>
+</div>
+<!-- Doc Item 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 flex gap-4 items-start shadow-sm hover:border-primary/30 transition-colors">
+<div class="mt-0.5">
+<div class="w-5 h-5 rounded border border-outline flex items-center justify-center bg-surface cursor-pointer hover:border-primary"></div>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold mb-1">Address Proof (Any One)</h4>
+<ul class="font-body-sm text-label-sm text-on-surface-variant list-disc pl-4 space-y-1">
+<li>Aadhaar Card <span class="text-primary text-[10px] bg-primary-container/30 px-1 rounded ml-1">Recommended</span></li>
+<li>Voter ID Card</li>
+<li>Passport</li>
+<li>Recent Utility Bill (Electricity/Water)</li>
+</ul>
+</div>
+<span class="bg-surface-container-high text-on-surface-variant border border-outline/20 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide">Copy Accepted</span>
+</div>
+<!-- Doc Item 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 flex gap-4 items-start shadow-sm hover:border-primary/30 transition-colors">
+<div class="mt-0.5">
+<div class="w-5 h-5 rounded border border-outline flex items-center justify-center bg-surface cursor-pointer hover:border-primary"></div>
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold mb-1">Learner's Licence</h4>
+<p class="font-body-sm text-label-sm text-on-surface-variant">Must be valid (not expired) and issued at least 30 days prior to applying for permanent licence.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Insights Grid (Bento style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Rejection Reasons -->
+<div class="bg-error-container/30 border border-error/20 rounded-xl p-4 flex flex-col gap-3">
+<h4 class="font-label-md text-label-md text-error flex items-center gap-2 font-bold">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+                                    Common Rejection Reasons
+                                </h4>
+<ul class="font-body-sm text-label-sm text-on-surface-variant space-y-2">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[14px] text-error mt-0.5">close</span>
+                                        Mismatch in name between Aadhaar and other documents.
+                                    </li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[14px] text-error mt-0.5">close</span>
+                                        Learner's licence expired before appearing for driving test.
+                                    </li>
+</ul>
+</div>
+<!-- Helpful Tips -->
+<div class="bg-tertiary-container/10 border border-tertiary/20 rounded-xl p-4 flex flex-col gap-3">
+<h4 class="font-label-md text-label-md text-tertiary flex items-center gap-2 font-bold">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+                                    Pro Tips
+                                </h4>
+<ul class="font-body-sm text-label-sm text-on-surface-variant space-y-2">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[14px] text-tertiary mt-0.5">check</span>
+                                        Book your driving test slot immediately after 30 days of LL issuance.
+                                    </li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[14px] text-tertiary mt-0.5">check</span>
+                                        Carry a valid medical certificate (Form 1A) if you are over 40 years old.
+                                    </li>
+</ul>
+</div>
+</div>
+<!-- Action footer -->
+<div class="mt-auto pt-6 border-t border-outline-variant/20 flex justify-between items-center">
+<a class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1" href="#">
+                                Visit Parivahan Sewa Official Portal
+                                <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+<button class="bg-surface border border-outline text-on-surface px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-colors shadow-sm active:scale-95">
+                                Clear Checklist
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-surface/90 dark:bg-surface-container-highest/90 backdrop-blur-md rounded-t-xl z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] border-t border-outline-variant/10">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors gap-1" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1 gap-1 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">magic_button</span>
+<span class="font-label-sm-mobile text-label-sm-mobile font-bold">AI Tools</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors gap-1" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Docs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors gap-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Profile</span>
+</a>
+</nav>
+</body></html>
