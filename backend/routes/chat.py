@@ -5,7 +5,7 @@ import logging
 from flask import Blueprint, request
 
 from services import chat_service
-from utils.auth_middleware import current_uid, require_auth
+from utils.auth_middleware import current_uid, require_auth, require_free_request
 from utils.responses import success
 from utils.validators import validate_chat
 
@@ -16,6 +16,7 @@ chat_bp = Blueprint("chat", __name__)
 
 @chat_bp.post("")
 @require_auth
+@require_free_request
 def chat():
     """Ask the civic assistant a question."""
     payload = validate_chat(request.get_json(silent=True))

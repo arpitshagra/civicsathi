@@ -5,7 +5,7 @@ import logging
 from flask import Blueprint, request
 
 from services import checklist_service
-from utils.auth_middleware import current_uid, require_auth
+from utils.auth_middleware import current_uid, require_auth, require_free_request
 from utils.responses import APIError, success
 from utils.validators import require_json, require_str, validate_checklist
 
@@ -16,6 +16,7 @@ checklist_bp = Blueprint("checklist", __name__)
 
 @checklist_bp.post("")
 @require_auth
+@require_free_request
 def generate():
     """Generate a document/eligibility checklist for a service."""
     payload = validate_checklist(request.get_json(silent=True))

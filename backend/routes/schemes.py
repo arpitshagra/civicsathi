@@ -5,7 +5,7 @@ import logging
 from flask import Blueprint, request
 
 from services import schemes_service
-from utils.auth_middleware import current_uid, require_auth
+from utils.auth_middleware import current_uid, require_auth, require_free_request
 from utils.responses import APIError, success
 from utils.validators import require_json, validate_schemes
 
@@ -16,6 +16,7 @@ schemes_bp = Blueprint("schemes", __name__)
 
 @schemes_bp.post("")
 @require_auth
+@require_free_request
 def find():
     """Recommend eligible schemes for a citizen profile."""
     profile = validate_schemes(request.get_json(silent=True))
