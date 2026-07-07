@@ -47,6 +47,6 @@ def ai_generate(
     except groq_service.GroqResponseError as exc:
         raise APIError("AI service returned an invalid response.", 502, "AI_ERROR") from exc
     except Exception as exc:  # noqa: BLE001 - upstream/network failures
-      import traceback
+        import traceback
     traceback.print_exc()
-    raise APIError(502, "AI_ERROR", str(exc))
+    raise APIError(str(exc), 502, "AI_ERROR") from exc
