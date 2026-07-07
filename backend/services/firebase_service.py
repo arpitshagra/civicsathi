@@ -231,3 +231,41 @@ def upsert_user(user: dict) -> None:
         ref.set(profile, merge=True)
     except Exception as exc:  # noqa: BLE001 - best-effort, never block request
         logger.warning("Failed to upsert user %s: %s", uid, exc)
+
+
+def consume_free_request(uid: str, limit: int) -> dict:
+    """Atomically consume one free AI request for a user.
+
+    Returns the updated usage details. No write occurs when the limit has
+    already been reached, so concurrent requests cannot exceed the allowance.
+    """
+    db = _require_db()
+    ref = db.collection("users").document(uid)
+    transaction = db.transaction()
+
+    @firestore.transactional
+    def consume(transaction):
+        snapshot = ref.get(transaction=transaction)
+        data = snapshot.to_dict() or {}
+        used = int(data.get("freeRequestCount", 0))
+        if used >= limit:
+            return {"allowed": False, "used": used, "remaining": 0, "limit": limit}
+
+        used += 1
+        transaction.set(
+            ref,
+            {
+                "uid": uid,
+                "freeRequestCount": used,
+                "updatedAt": firestore.SERVER_TIMESTAMP,
+            },
+            merge=True,
+        )
+        return {
+            "allowed": True,
+            "used": used,
+            "remaining": max(limit - used, 0),
+            "limit": limit,
+        }
+
+    return consume(transaction)

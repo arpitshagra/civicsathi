@@ -59,6 +59,9 @@ export default function Landing() {
                 Learn More
               </button>
             </div>
+            <p className="font-label-sm text-label-sm text-on-surface-variant">
+              3 free AI requests per account. No credit card required.
+            </p>
           </div>
           {/* Hero Dashboard Mockup (Bento/Glass) */}
           <section id="features" aria-label="Features" className="mt-xl w-full max-w-5xl z-10 relative scroll-mt-24">

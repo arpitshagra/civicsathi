@@ -79,6 +79,38 @@ def require_auth(view):
     return wrapper
 
 
+def require_free_request(view):
+    """Consume one of the authenticated account's free AI requests."""
+
+    @functools.wraps(view)
+    def wrapper(*args, **kwargs):
+        config = get_config()
+        try:
+            usage = firebase_service.consume_free_request(
+                current_uid(), config.FREE_REQUEST_LIMIT
+            )
+        except RuntimeError as exc:
+            logger.error("Request limit check unavailable: %s", exc)
+            raise APIError(
+                "Request limit service is not available.",
+                503,
+                "LIMIT_UNAVAILABLE",
+            ) from exc
+
+        if not usage["allowed"]:
+            raise APIError(
+                f"You have used all {usage['limit']} free AI requests for this account.",
+                429,
+                "FREE_REQUEST_LIMIT_REACHED",
+                usage,
+            )
+
+        g.request_usage = usage
+        return view(*args, **kwargs)
+
+    return wrapper
+
+
 def current_user() -> dict:
     """Return the authenticated user attached to the request context."""
     user = getattr(g, "user", None)

@@ -5,7 +5,7 @@ import logging
 from flask import Blueprint, request
 
 from services import complaint_service
-from utils.auth_middleware import current_uid, require_auth
+from utils.auth_middleware import current_uid, require_auth, require_free_request
 from utils.responses import APIError, success
 from utils.validators import optional_str, require_json, validate_complaint
 
@@ -16,6 +16,7 @@ complaint_bp = Blueprint("complaint", __name__)
 
 @complaint_bp.post("")
 @require_auth
+@require_free_request
 def generate():
     """Generate a structured complaint from an issue description."""
     payload = validate_complaint(request.get_json(silent=True))
