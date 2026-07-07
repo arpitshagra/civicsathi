@@ -100,9 +100,11 @@ def create_app() -> Flask:
 
     # CORS — scoped to the API surface. Allow the X-Language header through.
     CORS(
-        app,
-        resources={r"/api/*": {"origins": config.cors_origins_list}},
-        allow_headers=["Content-Type", "Authorization", "X-Language"],
+     
+    app,
+    resources={r"/api/*": {"origins": "*"}},
+    allow_headers=["Content-Type", "Authorization", "X-Language"],
+
     )
 
     @app.before_request
