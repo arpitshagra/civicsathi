@@ -92,6 +92,8 @@ export default function CivicPath() {
       clearInterval(interval);
       if (res && res.id) {
         navigate(`/civicpath/mission/${res.id}`);
+      } else {
+        setStep("questions");
       }
     } catch (err) {
       clearInterval(interval);
