@@ -28,7 +28,11 @@ _db = None  # Lazily-populated Firestore client handle.
 # ---------------------------------------------------------------------------
 
 def _build_credentials(config) -> Optional[credentials.Base]:
-    """Build Firebase credentials from configuration, if available."""
+    """Build Firebase credentials certificate from configuration, if available.
+    
+    Tries config.FIREBASE_CREDENTIALS_JSON first, falling back to config.FIREBASE_CREDENTIALS_PATH.
+    Returns None if neither is set or if credentials parsing fails.
+    """
     if config.FIREBASE_CREDENTIALS_JSON:
         try:
             info = json.loads(config.FIREBASE_CREDENTIALS_JSON)
@@ -119,7 +123,7 @@ def _require_db():
 
 
 def create_document(collection: str, data: dict) -> str:
-    """Create a document with a server-generated id and return that id.
+    """Create a document in Firestore with a server-generated ID and return that ID.
 
     ``createdAt`` / ``updatedAt`` server timestamps are added automatically.
     """
@@ -133,7 +137,10 @@ def create_document(collection: str, data: dict) -> str:
 
 
 def set_document(collection: str, doc_id: str, data: dict, merge: bool = True) -> None:
-    """Create or update a document with an explicit id."""
+    """Create or update a document with an explicit id.
+    
+    Updates the ``updatedAt`` server timestamp on set.
+    """
     db = _require_db()
     payload = dict(data)
     payload["updatedAt"] = firestore.SERVER_TIMESTAMP
@@ -141,7 +148,7 @@ def set_document(collection: str, doc_id: str, data: dict, merge: bool = True) -
 
 
 def update_document(collection: str, doc_id: str, data: dict) -> None:
-    """Update fields on an existing document."""
+    """Update specific fields on an existing document in Firestore."""
     db = _require_db()
     payload = dict(data)
     payload["updatedAt"] = firestore.SERVER_TIMESTAMP
@@ -149,7 +156,7 @@ def update_document(collection: str, doc_id: str, data: dict) -> None:
 
 
 def get_document(collection: str, doc_id: str) -> Optional[dict]:
-    """Fetch a single document as a dict (with ``id``), or None if missing."""
+    """Fetch a single document by ID as a dict (with ``id`` included), or None if missing."""
     db = _require_db()
     snap = db.collection(collection).document(doc_id).get()
     if not snap.exists:
@@ -197,20 +204,23 @@ def list_by_user(
 
 
 def count_by_user(collection: str, user_id: str) -> int:
-    """Count documents owned by ``user_id``."""
+    """Count documents owned by ``user_id`` by streaming and counting records."""
     db = _require_db()
     docs = db.collection(collection).where("userId", "==", user_id).stream()
     return sum(1 for _ in docs)
 
 
 def delete_document(collection: str, doc_id: str) -> None:
-    """Delete a document by id."""
+    """Delete a document matching doc_id from Firestore."""
     db = _require_db()
     db.collection(collection).document(doc_id).delete()
 
 
 def upsert_user(user: dict) -> None:
-    """Create or update the user profile document (best-effort)."""
+    """Create or update the user profile document (best-effort).
+    
+    Saves/updates profile information derived from Firebase Auth claims (Google Sign-In).
+    """
     if _db is None:
         return
     uid = user.get("uid")
@@ -219,6 +229,7 @@ def upsert_user(user: dict) -> None:
     profile = {
         "uid": uid,
         "email": user.get("email"),
+        "name": user.get("name"),
         "displayName": user.get("name"),
         "photoURL": user.get("picture"),
         "lastActiveAt": firestore.SERVER_TIMESTAMP,
@@ -236,8 +247,8 @@ def upsert_user(user: dict) -> None:
 def consume_free_request(uid: str, limit: int) -> dict:
     """Atomically consume one free AI request for a user.
 
-    Returns the updated usage details. No write occurs when the limit has
-    already been reached, so concurrent requests cannot exceed the allowance.
+    Uses a Firestore transaction to read the current request count, increment it if it's
+    under the limit, or return false if the limit is reached.
     """
     db = _require_db()
     ref = db.collection("users").document(uid)

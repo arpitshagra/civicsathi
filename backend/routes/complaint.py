@@ -18,7 +18,12 @@ complaint_bp = Blueprint("complaint", __name__)
 @require_auth
 @require_free_request
 def generate():
-    """Generate a structured complaint from an issue description."""
+    """Generate a structured complaint from a raw issue description.
+    
+    1. Validates that the input contains a valid issue description and location.
+    2. Invokes complaint_service.generate_complaint to use LLM parsing to categorize
+       the issue, identify the responsible department, flag priority level, and draft a formal letter.
+    """
     payload = validate_complaint(request.get_json(silent=True))
     data = complaint_service.generate_complaint(
         current_uid(), payload["description"], payload["location"]
@@ -29,7 +34,11 @@ def generate():
 @complaint_bp.post("/save")
 @require_auth
 def save():
-    """Save/file a complaint to the user's history."""
+    """Save/file a structured complaint to the user's history folder.
+    
+    Extracts the normalized complaint object and optional location, validates structure,
+    and inserts it into Firebase Firestore.
+    """
     body = require_json(request.get_json(silent=True))
     complaint = body.get("complaint")
     if not isinstance(complaint, dict):
@@ -42,13 +51,19 @@ def save():
 @complaint_bp.get("/history")
 @require_auth
 def history():
-    """List the user's complaint history."""
+    """List the user's filed complaints.
+    
+    Returns all previous complaints lodged or saved by the current user UID.
+    """
     return success(data=complaint_service.list_history(current_uid()))
 
 
 @complaint_bp.delete("/<doc_id>")
 @require_auth
 def delete_one(doc_id: str):
-    """Delete a complaint."""
+    """Delete a complaint from the database.
+    
+    Deletes the Firestore record matching doc_id under the user's namespace.
+    """
     complaint_service.delete_complaint(current_uid(), doc_id)
     return success(message="deleted")

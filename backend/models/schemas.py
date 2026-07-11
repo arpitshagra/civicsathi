@@ -19,6 +19,12 @@ _ALLOWED_PRIORITIES = {"Low", "Medium", "High"}
 # ---------------------------------------------------------------------------
 
 def _as_str(value: Any, default: str = "") -> str:
+    """Coerce any input value into a clean, markdown-stripped string.
+    
+    If value is None, returns the default.
+    If it is already a string, strips markdown symbols and whitespace.
+    Otherwise, casts to str.
+    """
     if value is None:
         return default
     if isinstance(value, str):
@@ -27,6 +33,7 @@ def _as_str(value: Any, default: str = "") -> str:
 
 
 def _as_optional_str(value: Any):
+    """Coerce input into a clean string, returning None if string is empty or None."""
     if value is None:
         return None
     text = _as_str(value)
@@ -34,7 +41,11 @@ def _as_optional_str(value: Any):
 
 
 def _as_str_list(value: Any) -> List[str]:
-    """Coerce a value into a list of non-empty strings."""
+    """Coerce any input value into a list of non-empty strings.
+    
+    Handles direct string inputs, list/tuple collections, and dictionary wrapped
+    keys (which frequently occurs when models return nested objects).
+    """
     if value is None:
         return []
     if isinstance(value, str):
@@ -59,7 +70,11 @@ def _as_str_list(value: Any) -> List[str]:
 
 
 def _clamp_confidence(value: Any, default: float = 0.5) -> float:
-    """Clamp a confidence value into the range [0, 1]."""
+    """Clamp a confidence score to a standard [0.0, 1.0] float range.
+    
+    Cleans model output fluctuations, parsing percentage scales (e.g. 85 -> 0.85)
+    and round-offs to three decimal places.
+    """
     try:
         num = float(value)
     except (TypeError, ValueError):
@@ -76,6 +91,7 @@ def _clamp_confidence(value: Any, default: float = 0.5) -> float:
 
 
 def _ensure_dict(data: Any) -> dict:
+    """Ensure the target variable is a dictionary wrapper, returning empty dict if not."""
     return data if isinstance(data, dict) else {}
 
 
@@ -84,6 +100,11 @@ def _ensure_dict(data: Any) -> dict:
 # ---------------------------------------------------------------------------
 
 def normalize_assistant(data: Any) -> dict:
+    """Coerce raw AI output into the schema required for the AI Civic Assistant.
+    
+    Ensures safe retrieval of lists of steps, required documents, official portals,
+    and clamping of model confidence scores.
+    """
     data = _ensure_dict(data)
     portals = []
     for p in data.get("officialPortals") or []:
@@ -110,6 +131,7 @@ def normalize_assistant(data: Any) -> dict:
 # ---------------------------------------------------------------------------
 
 def _normalize_scheme(item: Any) -> dict:
+    """Coerce single scheme block fields into standard formats."""
     item = _ensure_dict(item)
     return {
         "name": _as_str(item.get("name")),
@@ -123,6 +145,10 @@ def _normalize_scheme(item: Any) -> dict:
 
 
 def normalize_schemes(data: Any) -> dict:
+    """Coerce raw LLM schemes query list into standard API schemes output list.
+    
+    Filters out schemes that don't have a valid name and supplies a fallback disclaimer.
+    """
     data = _ensure_dict(data)
     raw = data.get("schemes")
     if not isinstance(raw, list):
@@ -143,6 +169,11 @@ def normalize_schemes(data: Any) -> dict:
 # ---------------------------------------------------------------------------
 
 def normalize_checklist(data: Any, service: str = "") -> dict:
+    """Normalize raw document checklist output.
+    
+    Enforces format on lists of required/optional docs, common rejection causes,
+    helpful tips, and URL links.
+    """
     data = _ensure_dict(data)
     return {
         "service": _as_str(data.get("service")) or service,
@@ -161,6 +192,11 @@ def normalize_checklist(data: Any, service: str = "") -> dict:
 # ---------------------------------------------------------------------------
 
 def normalize_simplify(data: Any) -> dict:
+    """Normalize a simplified civic announcement/notification payload.
+    
+    Ensures safe lists of bullet points, structured important dates objects,
+    and clear actionable citizen items.
+    """
     data = _ensure_dict(data)
     dates = []
     for d in data.get("importantDates") or []:
@@ -185,6 +221,11 @@ def normalize_simplify(data: Any) -> dict:
 # ---------------------------------------------------------------------------
 
 def normalize_complaint(data: Any) -> dict:
+    """Normalize a formatted civic complaint draft.
+    
+    Forces priority tags to a standard 'Low'/'Medium'/'High' set, and sanitizes
+    categorizations and descriptions.
+    """
     data = _ensure_dict(data)
     priority = _as_str(data.get("priority")).title()
     if priority not in _ALLOWED_PRIORITIES:

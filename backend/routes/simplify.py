@@ -18,6 +18,11 @@ simplify_bp = Blueprint("simplify", __name__)
 @require_auth
 @require_free_request
 def simplify():
-    """Simplify a long government notification into plain language."""
+    """Simplify a long government notification into plain, simple language.
+    
+    1. Validates the notification text input payload lengths.
+    2. Invokes simplify_service.simplify_notification to run LLM summarization.
+    3. Returns simplified bullet points, key dates, and citizen-actionable next steps.
+    """
     payload = validate_simplify(request.get_json(silent=True))
     return success(data=simplify_service.simplify_notification(current_uid(), payload["text"]))

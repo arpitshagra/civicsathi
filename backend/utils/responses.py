@@ -26,6 +26,7 @@ class APIError(Exception):
         self.details = details
 
     def to_dict(self) -> dict:
+        """Serialize the APIError object properties into a standard JSON payload format."""
         payload = {"status": "error", "message": self.message, "code": self.code}
         if self.details is not None:
             payload["details"] = self.details
@@ -33,12 +34,18 @@ class APIError(Exception):
 
 
 def success(data=None, message: str = "ok", status: int = 200):
-    """Build a standard success response."""
+    """Build a standard JSON success response envelope.
+    
+    Format: {"status": "success", "message": "...", "data": ...}
+    """
     return jsonify({"status": "success", "message": message, "data": data}), status
 
 
 def error(message: str, status: int = 400, code: str = "BAD_REQUEST", details=None):
-    """Build a standard error response."""
+    """Build a standard JSON error response envelope.
+    
+    Format: {"status": "error", "message": "...", "code": "...", "details": ...}
+    """
     payload = {"status": "error", "message": message, "code": code}
     if details is not None:
         payload["details"] = details

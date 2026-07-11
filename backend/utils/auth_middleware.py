@@ -29,7 +29,10 @@ _DEV_USER = {
 
 
 def _extract_bearer_token() -> str:
-    """Return the bearer token from the Authorization header, or raise 401."""
+    """Return the bearer token from the Authorization header, or raise 401.
+    
+    Expects header of format "Bearer <firebase_id_token>".
+    """
     header = request.headers.get("Authorization", "")
     if not header.startswith("Bearer "):
         raise APIError(
@@ -42,7 +45,12 @@ def _extract_bearer_token() -> str:
 
 
 def require_auth(view):
-    """Decorator enforcing Firebase authentication on a Flask view."""
+    """Decorator enforcing Firebase authentication on a Flask view.
+    
+    Checks config.AUTH_DISABLED to allow local bypass with a static dev user.
+    Otherwise, extracts and verifies the Firebase ID token, parses user profile info,
+    and updates the user document in Firebase Firestore.
+    """
 
     @functools.wraps(view)
     def wrapper(*args, **kwargs):
@@ -80,7 +88,11 @@ def require_auth(view):
 
 
 def require_free_request(view):
-    """Consume one of the authenticated account's free AI requests."""
+    """Consume one of the authenticated account's free AI requests.
+    
+    Verifies that the user has not exceeded their FREE_REQUEST_LIMIT.
+    Updates Firestore atomically. Raises 429 if the request quota is exhausted.
+    """
 
     @functools.wraps(view)
     def wrapper(*args, **kwargs):
@@ -112,7 +124,10 @@ def require_free_request(view):
 
 
 def current_user() -> dict:
-    """Return the authenticated user attached to the request context."""
+    """Return the authenticated user attached to the current request context.
+    
+    Raises 401 if request has not gone through require_auth decorator.
+    """
     user = getattr(g, "user", None)
     if not user:
         raise APIError("No authenticated user in context.", 401, "UNAUTHORIZED")
@@ -120,5 +135,5 @@ def current_user() -> dict:
 
 
 def current_uid() -> str:
-    """Return the authenticated user's UID."""
+    """Return the authenticated user's UID string from the current session."""
     return current_user()["uid"]

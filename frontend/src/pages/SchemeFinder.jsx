@@ -1,10 +1,11 @@
 // Feature 2 — Scheme Eligibility Finder. POST /api/schemes
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useApi } from "../hooks/useApi";
 import { SchemesAPI } from "../lib/endpoints";
 import Loader from "../components/Loader";
 import ErrorBanner from "../components/ErrorBanner";
 import ConfidenceBadge from "../components/ConfidenceBadge";
+import { useAuth } from "../context/AuthContext";
 
 const EMPTY = {
   age: "",
@@ -16,12 +17,51 @@ const EMPTY = {
 };
 
 export default function SchemeFinder() {
+  const { profile } = useAuth();
+  // Local state holding the target user profile fields
   const [form, setForm] = useState(EMPTY);
+  // Custom API hooks for requesting matches and saving chosen recommendations
   const { data, loading, error, run } = useApi(SchemesAPI.find);
   const { run: save } = useApi(SchemesAPI.save);
 
+  // Pre-fill form from profile on mount
+  useEffect(() => {
+    if (profile) {
+      let calculatedAge = "";
+      if (profile.dob) {
+        const birthDate = new Date(profile.dob);
+        const today = new Date();
+        let ageVal = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          ageVal--;
+        }
+        calculatedAge = ageVal > 0 ? String(ageVal) : "";
+      }
+
+      let numericIncome = "";
+      if (profile.annualIncome) {
+        if (profile.annualIncome === "Less than ₹2.5 Lakh") numericIncome = "150000";
+        else if (profile.annualIncome === "₹2.5–5 Lakh") numericIncome = "350000";
+        else if (profile.annualIncome === "₹5–10 Lakh") numericIncome = "750000";
+        else if (profile.annualIncome === "Above ₹10 Lakh") numericIncome = "1200000";
+      }
+
+      setForm({
+        age: calculatedAge,
+        gender: profile.gender || "",
+        state: profile.state || "",
+        occupation: profile.occupation || "",
+        education: profile.education || "",
+        annualIncome: numericIncome
+      });
+    }
+  }, [profile]);
+
+  // Helper hook mapper to dynamically bind state inputs to state keys
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  // Form submission: parses numerical inputs and triggers AI matching
   const submit = (e) => {
     e.preventDefault();
     run({

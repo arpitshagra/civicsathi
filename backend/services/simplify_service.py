@@ -10,10 +10,12 @@ logger = logging.getLogger("civicsathi.simplify_service")
 
 
 def simplify_notification(uid: str, text: str) -> dict:
-    """Simplify a government notification into plain-language guidance.
+    """Simplify a complex government notification into plain-language guidance.
 
-    The original notification text can be long/sensitive, so only a short
-    excerpt is stored in the history log alongside the structured result.
+    1. Calls Groq LLM under SIMPLIFY_SYSTEM_PROMPT.
+    2. Receives a structured JSON payload detailing summary, key points, dates, citizen actions.
+    3. Normalizes and validates the schema.
+    4. Truncates a small snippet/excerpt of the original text to record in history (saves DB space).
     """
     raw = ai_generate(
         prompts.SIMPLIFY_SYSTEM_PROMPT,

@@ -26,11 +26,15 @@ _ITALIC_UNDER = re.compile(r"(?<![\w_])_(?!\s)(.+?)(?<!\s)_(?![\w_])", re.DOTALL
 def strip_markdown(text):
     """Return ``text`` with common markdown formatting removed.
 
+    Defensively filters out headings, list bullets, code blocks, bold/italics,
+    and formats inline markdown links into a plain string containing URL destinations
+    in parentheses (e.g. "[Link](http://url)" -> "Link (http://url)").
     Non-string input is returned unchanged.
     """
     if not isinstance(text, str) or not text:
         return text
 
+    # Remove markdown formatting blocks and inline entities
     text = _CODE_FENCE.sub("", text)
     text = _INLINE_LINK.sub(r"\1 (\2)", text)  # keep link + destination
     text = _BARE_LINK.sub(r"\1 (\2)", text)

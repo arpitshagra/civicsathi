@@ -7,17 +7,24 @@ import ErrorBanner from "../components/ErrorBanner";
 import ConfidenceBadge from "../components/ConfidenceBadge";
 
 export default function Assistant() {
+  // message input state
   const [message, setMessage] = useState("");
+  // tracks conversation thread ID to maintain state across turns
   const [chatId, setChatId] = useState(null);
+  
+  // hooks up the custom API runner for sending messages
   const { data, loading, error, run } = useApi(ChatAPI.send);
 
+  // Triggers assistant answer generation
   const ask = async (e) => {
     e?.preventDefault();
     if (!message.trim()) return;
     const res = await run({ message, chatId });
+    // Save chatId returned from backend to persist conversation thread
     if (res?.chatId) setChatId(res.chatId);
   };
 
+  // Static prompt suggestions displayed inside welcome card
   const suggestions = [
     {
       icon: "article",
@@ -227,6 +234,7 @@ export default function Assistant() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => {
+                // Submit form when hitting Enter key without the Shift key pressed
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   ask(e);

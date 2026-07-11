@@ -9,10 +9,12 @@ export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
+  // If user auth state exists, automatically redirect them to the dashboard panel
   useEffect(() => {
     if (user) navigate("/dashboard", { replace: true });
   }, [user, navigate]);
 
+  // Executes Firebase popup sign in process, catching login execution errors
   const handleLogin = async () => {
     setError(null);
     try {

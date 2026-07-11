@@ -18,7 +18,12 @@ _COLLECTION = "complaints"
 
 
 def generate_complaint(uid: str, description: str, location: str = "") -> dict:
-    """Classify a civic issue and draft a structured complaint."""
+    """Classify a raw civic issue text and draft a structured complaint letter.
+    
+    1. Feeds the description and location into Groq LLM under COMPLAINT_SYSTEM_PROMPT.
+    2. Receives a structured JSON payload containing department, priority, category, title, draft letter.
+    3. Coerces output format and records it in history.
+    """
     raw = ai_generate(
         prompts.COMPLAINT_SYSTEM_PROMPT,
         prompts.build_complaint_prompt(description, location),
@@ -31,7 +36,10 @@ def generate_complaint(uid: str, description: str, location: str = "") -> dict:
 
 
 def save_complaint(uid: str, complaint: dict, location: str = "") -> str:
-    """Persist a complaint the user chose to file/track."""
+    """Persist a generated complaint draft to the user's filed history.
+    
+    Validates formatting and saves the status as "Submitted".
+    """
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     if not isinstance(complaint, dict) or not complaint.get("title"):
@@ -49,14 +57,14 @@ def save_complaint(uid: str, complaint: dict, location: str = "") -> str:
 
 
 def list_history(uid: str) -> list:
-    """List the user's complaint history."""
+    """List all filed complaints matching the current user's UID."""
     if not firebase_service.is_ready():
         return []
     return firebase_service.list_by_user(_COLLECTION, uid)
 
 
 def delete_complaint(uid: str, doc_id: str) -> None:
-    """Delete a complaint owned by the user."""
+    """Delete a filed complaint from Firebase after checking owner permissions."""
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     doc = firebase_service.get_document(_COLLECTION, doc_id)

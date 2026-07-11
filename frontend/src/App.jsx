@@ -1,6 +1,7 @@
 // Router. Public: /, /landing, /login. Protected pages share <Layout/> (Sidebar).
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
@@ -13,18 +14,23 @@ import Checklist from "./pages/Checklist";
 import Simplifier from "./pages/Simplifier";
 import Complaint from "./pages/Complaint";
 import Profile from "./pages/Profile";
+import ProfileSetup from "./pages/ProfileSetup";
 
 export default function App() {
+  // App serves as the main shell, setting up context providers for language configurations,
+  // Firebase authentication states, browser routers, and route-level protection middleware.
   return (
-    <AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Public */}
+          {/* Public Routes — Accessible to anyone without a login token */}
           <Route path="/" element={<Landing />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Protected (shared Sidebar layout) */}
+          {/* Protected Routes — Wires the <ProtectedRoute> gate to intercept calls.
+              Shares the <Layout /> wrapper which renders the main sidebar navigation menu. */}
           <Route
             element={
               <ProtectedRoute>
@@ -40,8 +46,19 @@ export default function App() {
             <Route path="/complaint" element={<Complaint />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
+
+          {/* Onboarding Wizard — Protected but without Sidebar Layout */}
+          <Route
+            path="/profile/setup"
+            element={
+              <ProtectedRoute>
+                <ProfileSetup />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </LanguageProvider>
   );
 }

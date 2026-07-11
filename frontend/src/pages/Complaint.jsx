@@ -7,16 +7,21 @@ import ErrorBanner from "../components/ErrorBanner";
 import ConfidenceBadge from "../components/ConfidenceBadge";
 
 export default function Complaint() {
+  // Input fields states
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  
+  // Custom API hooks for generating complaint draft and filing it
   const { data, loading, error, run } = useApi(ComplaintAPI.generate);
   const { run: save, data: saved } = useApi(ComplaintAPI.save);
 
+  // Handles generating the complaint draft
   const submit = (e) => {
     e.preventDefault();
     if (description.trim().length >= 5) run({ description, location });
   };
 
+  // Color mapping configurations based on target LLM priority outputs
   const priorityTone = {
     High: "bg-error-container text-on-error-container",
     Medium: "bg-amber-100 text-amber-800",
@@ -58,7 +63,7 @@ export default function Complaint() {
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">location_on</span>
                   <input
-                    className="w-full bg-surface rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary text-on-surface font-body-md text-body-md p-3 pl-10 transition-colors shadow-sm"
+                     className="w-full bg-surface rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary text-on-surface font-body-md text-body-md p-3 pl-10 transition-colors shadow-sm"
                     id="complaint-loc"
                     placeholder="Street, Landmark, Ward number..."
                     type="text"

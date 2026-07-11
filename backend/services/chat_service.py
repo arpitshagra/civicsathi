@@ -18,7 +18,11 @@ _COLLECTION = "chats"
 
 
 def _generate_answer(message: str) -> dict:
-    """Call Groq and normalise the assistant answer."""
+    """Call Groq and normalise the assistant answer.
+    
+    Uses CHAT_SYSTEM_PROMPT to command the assistant's context and personality.
+    Returns standard schemas.normalize_assistant format dict.
+    """
     raw = ai_generate(
         prompts.CHAT_SYSTEM_PROMPT,
         prompts.build_chat_prompt(message),
@@ -27,15 +31,22 @@ def _generate_answer(message: str) -> dict:
 
 
 def _persist(uid: str, message: str, answer: dict, chat_id: Optional[str]) -> Optional[str]:
-    """Persist the exchange; returns the chat id, or None if unavailable."""
+    """Persist the exchange; returns the chat id, or None if database is unavailable.
+    
+    If chat_id is passed, appends the messages to the existing document in Firestore.
+    Otherwise, creates a new chat document. Fails gracefully to let the chat run
+    offline even if DB fails.
+    """
     if not firebase_service.is_ready():
         return chat_id
 
+    # Construct chat message entities
     user_msg = {"role": "user", "content": message}
     assistant_msg = {"role": "assistant", "content": answer.get("answer", ""), "structured": answer}
 
     try:
         if chat_id:
+            # Append exchange to existing conversation log
             existing = firebase_service.get_document(_COLLECTION, chat_id)
             if existing is None or existing.get("userId") != uid:
                 raise APIError("Conversation not found.", 404, "NOT_FOUND")
@@ -44,6 +55,7 @@ def _persist(uid: str, message: str, answer: dict, chat_id: Optional[str]) -> Op
             firebase_service.update_document(_COLLECTION, chat_id, {"messages": messages})
             return chat_id
 
+        # Generate a new conversation document. Title is truncated from first message
         title = (message[:60] + "…") if len(message) > 60 else message
         return firebase_service.create_document(
             _COLLECTION,
@@ -57,14 +69,20 @@ def _persist(uid: str, message: str, answer: dict, chat_id: Optional[str]) -> Op
 
 
 def handle_chat(uid: str, message: str, chat_id: Optional[str] = None) -> dict:
-    """Generate an answer, persist the conversation, and return the payload."""
+    """Generate an assistant answer, persist the exchange to Firebase, and return results.
+    
+    Acts as the entrypoint for route handling.
+    """
     answer = _generate_answer(message)
     saved_chat_id = _persist(uid, message, answer, chat_id)
     return {**answer, "chatId": saved_chat_id}
 
 
 def list_history(uid: str) -> list:
-    """Return the user's conversations (metadata only)."""
+    """Return all conversation threads owned by the user (metadata details only).
+    
+    Returns minimal payload objects for sidebar list render performance.
+    """
     if not firebase_service.is_ready():
         return []
     chats = firebase_service.list_by_user(_COLLECTION, uid)
@@ -81,7 +99,7 @@ def list_history(uid: str) -> list:
 
 
 def get_chat(uid: str, chat_id: str) -> dict:
-    """Return a full conversation owned by the user."""
+    """Return a full conversation thread (prompts + responses) owned by the user."""
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     chat = firebase_service.get_document(_COLLECTION, chat_id)
@@ -91,7 +109,7 @@ def get_chat(uid: str, chat_id: str) -> dict:
 
 
 def delete_chat(uid: str, chat_id: str) -> None:
-    """Delete a conversation owned by the user."""
+    """Delete a conversation thread matching chat_id from Firebase."""
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     chat = firebase_service.get_document(_COLLECTION, chat_id)

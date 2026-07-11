@@ -7,15 +7,20 @@ import ErrorBanner from "../components/ErrorBanner";
 import ConfidenceBadge from "../components/ConfidenceBadge";
 
 export default function Simplifier() {
+  // Notification input text state
   const [text, setText] = useState("");
+  // Toggles copy to clipboard feedback message
   const [copied, setCopied] = useState(false);
+  // Custom API hook for running simplification
   const { data, loading, error, run } = useApi(SimplifyAPI.run);
 
+  // Handles form submission
   const submit = (e) => {
     e.preventDefault();
     if (text.trim().length >= 10) run({ text });
   };
 
+  // Formats matching structured results and copies them to the operating system clipboard.
   const copyResult = async () => {
     if (!data) return;
     const parts = [

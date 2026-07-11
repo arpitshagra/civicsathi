@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
+// Custom front-end API Exception wrapper matching backend's APIError structure
 class ApiError extends Error {
   constructor(message, code, status) {
     super(message);
@@ -15,16 +16,18 @@ class ApiError extends Error {
   }
 }
 
-// Current UI/output language, persisted across sessions. Read by every request
-// and by the language toggle in the sidebar.
+// Retrieves user's language selection from local storage (falls back to English 'en')
 export function getLanguage() {
   return localStorage.getItem("lang") || "en";
 }
 
+// Stores user's language selection in local storage for session persistence
 export function setLanguage(lang) {
   localStorage.setItem("lang", lang);
 }
 
+// Core HTTP request executor: adds JSON headers, sets target language header,
+// fetches ID tokens from active Firebase sessions, and executes window.fetch.
 async function request(method, path, body) {
   const headers = {
     "Content-Type": "application/json",
@@ -57,13 +60,14 @@ async function request(method, path, body) {
     json = null;
   }
 
+  // Intercept backend-level failures or network status error codes
   if (!res.ok || (json && json.status === "error")) {
     const message = (json && json.message) || `Request failed (${res.status})`;
     const code = (json && json.code) || "ERROR";
     throw new ApiError(message, code, res.status);
   }
 
-  // Success envelope: return the payload.
+  // Success envelope: unwrap and return the raw payload data block
   return json ? json.data : null;
 }
 

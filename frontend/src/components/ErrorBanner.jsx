@@ -1,4 +1,5 @@
 export default function ErrorBanner({ message }) {
+  // If no error message exists, do not render any banner wrapper
   if (!message) return null;
   return (
     <div

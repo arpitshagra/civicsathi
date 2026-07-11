@@ -28,7 +28,10 @@ class GroqResponseError(RuntimeError):
 
 
 def get_client() -> Optional[Groq]:
-    """Return a lazily-initialised Groq client, or None if unconfigured."""
+    """Return a lazily-initialised Groq client, or None if unconfigured.
+    
+    Instantiates the SDK wrapper client using the GROQ_API_KEY config.
+    """
     global _client
 
     if _client is not None:
@@ -77,7 +80,11 @@ def chat_completion(
 
 
 def _extract_json(text: str) -> dict:
-    """Parse a JSON object from model output, tolerating code fences/prose."""
+    """Parse a JSON object from model output, tolerating code fences/prose.
+    
+    Attempts standard json.loads parsing. If it fails, locates the outer braces
+    `{ ... }` and parses the substring candidate.
+    """
     text = text.strip()
     try:
         return json.loads(text)
@@ -102,6 +109,9 @@ def generate_json(
 ) -> dict:
     """Request a JSON object from Groq, with one repair retry on failure.
 
+    Sends the prompt requesting json_object format. If the model outputs corrupted JSON,
+    it executes a feedback loop (repair request) to force validation.
+    
     Raises:
         GroqUnavailableError: If the Groq client is not configured.
         GroqResponseError: If valid JSON cannot be obtained after a retry.

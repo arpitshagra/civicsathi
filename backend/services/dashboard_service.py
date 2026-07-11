@@ -9,7 +9,12 @@ logger = logging.getLogger("civicsathi.dashboard_service")
 
 
 def get_summary(uid: str) -> dict:
-    """Aggregate counts and recent items across the user's collections."""
+    """Aggregate document counts and recent active threads/complaints for a user UID.
+    
+    1. Returns zeros/empty structures if Firebase service is not initialized.
+    2. Runs count query tasks on chats, savedSchemes, savedChecklists, complaints, and general history lists.
+    3. Fetches the most recent chats and complaints matching DASHBOARD_RECENT_LIMIT.
+    """
     config = get_config()
     limit = config.DASHBOARD_RECENT_LIMIT
 

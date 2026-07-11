@@ -13,7 +13,12 @@ _COLLECTION = "savedSchemes"
 
 
 def find_schemes(uid: str, profile: dict) -> dict:
-    """Recommend eligible schemes for a validated citizen profile."""
+    """Recommend eligible schemes for a validated citizen profile.
+    
+    1. Feeds state, income, gender, age etc. to Groq LLM under SCHEMES_SYSTEM_PROMPT.
+    2. Receives a structured JSON payload of recommended schemes.
+    3. Normalizes and validates the schema, then logs to user history.
+    """
     raw = ai_generate(
         prompts.SCHEMES_SYSTEM_PROMPT,
         prompts.build_schemes_prompt(profile),
@@ -24,7 +29,7 @@ def find_schemes(uid: str, profile: dict) -> dict:
 
 
 def save_scheme(uid: str, scheme: dict, profile_snapshot: dict) -> str:
-    """Persist a scheme the user chose to save."""
+    """Persist a scheme details recommendation the user chose to save/bookmark."""
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     if not isinstance(scheme, dict) or not scheme.get("name"):
@@ -40,14 +45,14 @@ def save_scheme(uid: str, scheme: dict, profile_snapshot: dict) -> str:
 
 
 def list_saved(uid: str) -> list:
-    """List the user's saved schemes."""
+    """List all saved scheme recommendations owned by the current user UID."""
     if not firebase_service.is_ready():
         return []
     return firebase_service.list_by_user(_COLLECTION, uid)
 
 
 def delete_saved(uid: str, doc_id: str) -> None:
-    """Delete a saved scheme owned by the user."""
+    """Delete a bookmarked scheme recommendation after checking user ownership."""
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     doc = firebase_service.get_document(_COLLECTION, doc_id)

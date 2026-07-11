@@ -14,10 +14,13 @@ const PRESETS = [
 ];
 
 export default function Checklist() {
+  // Input search term state
   const [service, setService] = useState("");
+  // Custom API hooks for generating and saving checklists
   const { data, loading, error, run } = useApi(ChecklistAPI.generate);
   const { run: save } = useApi(ChecklistAPI.save);
 
+  // Handles checklist generation form submission
   const submit = (e) => {
     e.preventDefault();
     if (service.trim()) run({ service });

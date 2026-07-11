@@ -13,7 +13,12 @@ _COLLECTION = "savedChecklists"
 
 
 def generate_checklist(uid: str, service: str) -> dict:
-    """Generate a document checklist for a government service."""
+    """Generate a document checklist for a government service.
+    
+    1. Uses Groq LLM API to extract a structured list of documents based on system prompt instructions.
+    2. Coerces output to standard checklist normalizations.
+    3. Records a snapshot run in the history logging system.
+    """
     raw = ai_generate(
         prompts.CHECKLIST_SYSTEM_PROMPT,
         prompts.build_checklist_prompt(service),
@@ -24,7 +29,10 @@ def generate_checklist(uid: str, service: str) -> dict:
 
 
 def save_checklist(uid: str, service: str, checklist: dict) -> str:
-    """Persist a checklist the user chose to save."""
+    """Persist a generated checklist the user chose to save to their library.
+    
+    Verifies Firebase client availability, normalizes input, and returns document ID.
+    """
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     if not isinstance(checklist, dict):
@@ -40,14 +48,14 @@ def save_checklist(uid: str, service: str, checklist: dict) -> str:
 
 
 def list_saved(uid: str) -> list:
-    """List the user's saved checklists."""
+    """List all saved checklists for the current user UID from Firestore."""
     if not firebase_service.is_ready():
         return []
     return firebase_service.list_by_user(_COLLECTION, uid)
 
 
 def delete_saved(uid: str, doc_id: str) -> None:
-    """Delete a saved checklist owned by the user."""
+    """Delete a saved checklist from Firestore, validating ownership first."""
     if not firebase_service.is_ready():
         raise APIError("Persistence is not available.", 503, "DB_UNAVAILABLE")
     doc = firebase_service.get_document(_COLLECTION, doc_id)
