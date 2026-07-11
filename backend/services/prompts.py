@@ -277,12 +277,6 @@ CIVICPATH_ROADMAP_PROMPT = (
     "  ],\n"
     '  "recommendations": [\n'
     '    { "name": string, "description": string }\n'
-    "  ],\n"
-    '  "timeline": [\n'
-    '    { "week": string, "stepIds": string[] }\n'
-    "  ],\n"
-    '  "reminders": [\n'
-    '    { "title": string, "due": string }\n'
     "  ]\n"
     "}"
 )

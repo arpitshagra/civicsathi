@@ -29,6 +29,36 @@ def generate_roadmap(uid: str, goal: str, answers: dict) -> dict:
         prompts.build_civicpath_roadmap_prompt(goal, answers),
     )
     
+    steps = raw.get("steps") or []
+    
+    # Structure timeline grouping in Python (2 steps per week)
+    timeline = []
+    for i, s in enumerate(steps):
+        step_id = s.get("id") or f"step_{i+1}"
+        s["id"] = step_id
+        s.setdefault("status", "Not Started")
+        
+        week_num = (i // 2) + 1
+        week_label = f"Week {week_num}"
+        
+        found = False
+        for t in timeline:
+            if t["week"] == week_label:
+                t["stepIds"].append(step_id)
+                found = True
+                break
+        if not found:
+            timeline.append({"week": week_label, "stepIds": [step_id]})
+
+    # Generate reminders automatically in Python based on the steps checklist
+    reminders = []
+    for s in steps:
+        if s.get("title"):
+            reminders.append({
+                "title": f"Apply for {s['title']}",
+                "due": s.get("estimatedTime") or "Soon"
+            })
+
     # Structure the database payload
     mission = {
         "userId": uid,
@@ -40,10 +70,10 @@ def generate_roadmap(uid: str, goal: str, answers: dict) -> dict:
         "estimatedTime": raw.get("estimatedTime") or "Unknown",
         "difficulty": raw.get("difficulty") or "Medium",
         "potentialBenefits": raw.get("potentialBenefits") or "₹0",
-        "steps": raw.get("steps") or [],
+        "steps": steps,
         "recommendations": raw.get("recommendations") or [],
-        "timeline": raw.get("timeline") or [],
-        "reminders": raw.get("reminders") or [],
+        "timeline": timeline,
+        "reminders": reminders,
         "documents": [], # vault uploaded list (stores document metadata)
         "startedAt": None,
         "completedAt": None
