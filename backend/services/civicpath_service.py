@@ -81,10 +81,15 @@ def generate_roadmap(uid: str, goal: str, answers: dict) -> dict:
     
     # Fill in server generated timestamp placeholder or actual
     if firebase_service.is_ready():
-        # Set createdAt and startedAt
         from firebase_admin import firestore
-        mission["startedAt"] = firestore.SERVER_TIMESTAMP
-        doc_id = firebase_service.create_document(_COLLECTION, mission)
+        from datetime import datetime
+        
+        db_payload = dict(mission)
+        db_payload["startedAt"] = firestore.SERVER_TIMESTAMP
+        
+        doc_id = firebase_service.create_document(_COLLECTION, db_payload)
+        
+        mission["startedAt"] = datetime.utcnow().isoformat() + "Z"
         mission["id"] = doc_id
         return mission
     else:
