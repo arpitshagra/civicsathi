@@ -168,6 +168,46 @@ export default function Dashboard() {
     );
   };
 
+  const renderActiveMissionCard = () => {
+    const active = data?.activeMission;
+    if (!active) return null;
+
+    return (
+      <div className="glass-panel rounded-xl p-5 border border-tertiary-container/30 bg-surface flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 animate-fadeIn">
+        <div className="flex-1 space-y-3">
+          <div className="flex items-center justify-between font-label-md text-label-md text-on-surface-variant">
+            <span className="flex items-center gap-2 font-bold text-tertiary">
+              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>explore</span>
+              Continue Your Mission
+            </span>
+            <span className="font-bold text-tertiary">{active.progress}% Complete</span>
+          </div>
+
+          <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden border border-outline-variant/20">
+            <div
+              className="bg-tertiary h-full rounded-full transition-all duration-300"
+              style={{ width: `${active.progress}%` }}
+            ></div>
+          </div>
+
+          <p className="font-body-md text-body-md text-on-surface-variant text-sm font-semibold">
+            Mission: {active.missionName} ({active.status})
+          </p>
+        </div>
+        
+        <div className="shrink-0 flex items-center">
+          <Link
+            to={`/civicpath/mission/${active.id}`}
+            className="w-full md:w-auto px-5 py-2.5 bg-tertiary text-on-tertiary rounded-lg font-label-md text-label-md hover:bg-tertiary/95 transition-all duration-200 active:scale-95 shadow-sm flex items-center justify-center gap-1 font-semibold"
+          >
+            Continue
+            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {/* TopNavBar / greeting header */}
@@ -192,6 +232,9 @@ export default function Dashboard() {
       <div className="p-6 md:p-8 max-w-7xl mx-auto w-full flex-1 flex flex-col gap-xl">
         {/* Profile Completion banner at the top */}
         {renderProfileCompletionCard()}
+
+        {/* Active Mission card */}
+        {renderActiveMissionCard()}
 
         {/* AI Search / Greeting Hero */}
         <section className="flex flex-col items-center justify-center text-center mt-lg mb-4">

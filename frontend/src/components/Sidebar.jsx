@@ -8,6 +8,7 @@ import logo from "../assets/civicsathi-logo.png";
 // Sidebar navigation routes config list mapping paths, keys, and material icons
 const NAV = [
   { to: "/dashboard", key: "dashboard", icon: "dashboard", end: true },
+  { to: "/civicpath", key: "civicpath", icon: "route" },
   { to: "/assistant", key: "assistant", icon: "smart_toy" },
   { to: "/schemes", key: "schemes", icon: "search_check" },
   { to: "/checklist", key: "checklist", icon: "checklist" },

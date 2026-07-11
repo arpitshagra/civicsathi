@@ -42,6 +42,19 @@ def get_summary(uid: str) -> dict:
     recent_chats = firebase_service.list_by_user("chats", uid, limit=limit)
     recent_complaints = firebase_service.list_by_user("complaints", uid, limit=limit)
 
+    active_mission = None
+    if firebase_service.is_ready():
+        missions = firebase_service.list_by_user("missions", uid)
+        for m in missions:
+            if m.get("status") in {"In Progress", "Planning"}:
+                active_mission = {
+                    "id": m["id"],
+                    "missionName": m.get("missionName"),
+                    "progress": m.get("progress", 0),
+                    "status": m.get("status")
+                }
+                break
+
     return {
         "counts": counts,
         "recentChats": [
@@ -61,4 +74,5 @@ def get_summary(uid: str) -> dict:
             }
             for c in recent_complaints
         ],
+        "activeMission": active_mission,
     }

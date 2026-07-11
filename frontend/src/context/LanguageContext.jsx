@@ -7,6 +7,7 @@ const TRANSLATIONS = {
   en: {
     // Navigation
     dashboard: "Dashboard",
+    civicpath: "CivicPath AI",
     assistant: "AI Assistant",
     schemes: "Scheme Finder",
     checklist: "Doc Checklist",
@@ -118,6 +119,7 @@ const TRANSLATIONS = {
   hi: {
     // Navigation
     dashboard: "डैशबोर्ड",
+    civicpath: "सिविकपाथ एआई",
     assistant: "एआई सहायक",
     schemes: "योजना खोजक",
     checklist: "दस्तावेज़ चेकलिस्ट",

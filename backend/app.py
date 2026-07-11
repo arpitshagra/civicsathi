@@ -19,6 +19,7 @@ from routes.dashboard import dashboard_bp
 from routes.schemes import schemes_bp
 from routes.simplify import simplify_bp
 from routes.profile import profile_bp
+from routes.civicpath import civicpath_bp
 from services import prompts
 from services.firebase_service import init_firebase
 from utils.responses import APIError
@@ -51,6 +52,7 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(complaint_bp, url_prefix="/api/complaint")
     app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")
     app.register_blueprint(profile_bp, url_prefix="/api/profile")
+    app.register_blueprint(civicpath_bp, url_prefix="/api/civicpath")
 
 
 def register_error_handlers(app: Flask) -> None:

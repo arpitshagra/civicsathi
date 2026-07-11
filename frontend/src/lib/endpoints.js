@@ -60,3 +60,13 @@ export const ComplaintAPI = {
 export const DashboardAPI = {
   summary: () => api.get("/api/dashboard/summary"),
 };
+
+// CivicPath AI roadmapping endpoints
+export const CivicPathAPI = {
+  questions: ({ goal }) => api.post("/api/civicpath/questions", { goal }),
+  generate: ({ goal, answers }) => api.post("/api/civicpath/generate", { goal, answers }),
+  list: () => api.get("/api/civicpath/missions"),
+  get: (id) => api.get(`/api/civicpath/missions/${id}`),
+  update: (id, payload) => api.put(`/api/civicpath/missions/${id}`, payload),
+  remove: (id) => api.del(`/api/civicpath/missions/${id}`),
+};

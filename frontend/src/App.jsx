@@ -15,6 +15,8 @@ import Simplifier from "./pages/Simplifier";
 import Complaint from "./pages/Complaint";
 import Profile from "./pages/Profile";
 import ProfileSetup from "./pages/ProfileSetup";
+import CivicPath from "./pages/CivicPath";
+import MissionDashboard from "./pages/MissionDashboard";
 
 export default function App() {
   // App serves as the main shell, setting up context providers for language configurations,
@@ -39,6 +41,8 @@ export default function App() {
             }
           >
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/civicpath" element={<CivicPath />} />
+            <Route path="/civicpath/mission/:id" element={<MissionDashboard />} />
             <Route path="/assistant" element={<Assistant />} />
             <Route path="/schemes" element={<SchemeFinder />} />
             <Route path="/checklist" element={<Checklist />} />

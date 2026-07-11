@@ -237,3 +237,18 @@ def validate_profile(body: Any) -> dict:
         "disability": disability,
         "interests": interests
     }
+
+
+def validate_goal(body: Any) -> str:
+    """Validate user input goal for roadmap generation."""
+    body = require_json(body)
+    return require_str(body, "goal", 250)
+
+
+def validate_answers(body: Any) -> dict:
+    """Validate dynamic questions answers dict payload."""
+    body = require_json(body)
+    answers = body.get("answers")
+    if not isinstance(answers, dict):
+        raise APIError("'answers' object is required.", 400, "INVALID_FIELD")
+    return answers
