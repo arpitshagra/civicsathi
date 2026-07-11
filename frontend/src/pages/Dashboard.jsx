@@ -220,7 +220,10 @@ export default function Dashboard() {
           <button className="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
             <span className="material-symbols-outlined">notifications</span>
           </button>
-          <button className="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high">
+          <button
+            onClick={openSettings}
+            className="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container-high"
+          >
             <span className="material-symbols-outlined">settings</span>
           </button>
           <div className="w-8 h-8 rounded-full bg-secondary-container overflow-hidden border border-outline-variant/30 flex items-center justify-center text-on-secondary-container font-semibold">

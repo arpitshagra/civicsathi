@@ -52,7 +52,7 @@ const INTEREST_OPTIONS = [
 
 export default function Profile() {
   const { user, profile, logout, refreshProfile } = useAuth();
-  const { language, changeLanguage, t } = useLanguage();
+  const { language, changeLanguage, openSettings, t } = useLanguage();
 
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
@@ -270,13 +270,23 @@ export default function Profile() {
           </div>
           
           {!isEditing && (
-            <button
-              onClick={handleEdit}
-              className="px-5 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary/95 transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-1.5 font-semibold"
-            >
-              <span className="material-symbols-outlined text-[18px]">edit</span>
-              Edit Profile
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={openSettings}
+                className="px-5 py-2 bg-surface border border-outline-variant text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-colors active:scale-95 flex items-center gap-1.5 font-semibold"
+              >
+                <span className="material-symbols-outlined text-[18px]">settings</span>
+                {language === "hi" ? "प्राथमिकताएं" : "Preferences"}
+              </button>
+              <button
+                onClick={handleEdit}
+                className="px-5 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary/95 transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-1.5 font-semibold"
+              >
+                <span className="material-symbols-outlined text-[18px]">edit</span>
+                Edit Profile
+              </button>
+            </div>
           )}
         </div>
 

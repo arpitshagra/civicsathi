@@ -109,138 +109,140 @@ export default function Checklist() {
 
           {data && (
             /* Generated Checklist Result Card (Glassmorphism & AI styling) */
-            <div className="ai-gradient-border rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] bg-surface/90 backdrop-blur-md overflow-hidden flex flex-col h-full relative">
-              {/* AI Badge & Header */}
-              <div className="ai-tint-bg p-6 border-b border-outline-variant/20 flex flex-col gap-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center gap-2 bg-surface-container-lowest border border-primary/20 rounded-full px-3 py-1 shadow-sm w-max">
-                    <span className="material-symbols-outlined text-primary text-[16px]">auto_awesome</span>
-                    <span className="font-label-sm text-label-sm text-primary">AI Verified Checklist</span>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <ConfidenceBadge value={data.confidence} />
-                    <button
-                      onClick={() => save({ service: data.service, checklist: data })}
-                      className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm active:scale-95"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">bookmark_add</span>
-                      Save
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <h2 className="font-display-lg text-headline-lg text-on-surface mb-1">{data.service}</h2>
-                </div>
-                {/* Info Pills */}
-                {data.processingTime && (
-                  <div className="flex flex-wrap gap-3 mt-2">
-                    <div className="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-md border border-outline-variant/30">
-                      <span className="material-symbols-outlined text-outline text-[18px]">schedule</span>
-                      <span className="font-label-md text-label-md text-on-surface-variant">{data.processingTime}</span>
+            <div className="rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] bg-gradient-to-br from-primary to-secondary-container p-[1px] overflow-hidden flex flex-col h-full">
+              <div className="bg-surface/90 backdrop-blur-md rounded-[11px] overflow-hidden flex flex-col h-full relative flex-1">
+                {/* AI Badge & Header */}
+                <div className="ai-tint-bg p-6 border-b border-outline-variant/20 flex flex-col gap-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-2 bg-surface-container-lowest border border-primary/20 rounded-full px-3 py-1 shadow-sm w-max">
+                      <span className="material-symbols-outlined text-primary text-[16px]">auto_awesome</span>
+                      <span className="font-label-sm text-label-sm text-primary">AI Verified Checklist</span>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      <ConfidenceBadge value={data.confidence} />
+                      <button
+                        onClick={() => save({ service: data.service, checklist: data })}
+                        className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm active:scale-95"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">bookmark_add</span>
+                        Save
+                      </button>
                     </div>
                   </div>
-                )}
-              </div>
-              {/* Checklist Content */}
-              <div className="p-6 flex-1 overflow-y-auto flex flex-col gap-8">
-                {/* Required Documents Section */}
-                {data.requiredDocuments?.length > 0 && (
-                  <section>
-                    <h3 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-4">
-                      <span className="material-symbols-outlined text-error">asterisk</span>
-                      Mandatory Documents
-                    </h3>
-                    <div className="flex flex-col gap-3">
-                      {data.requiredDocuments.map((doc, i) => (
-                        <div key={i} className="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 flex gap-4 items-start shadow-sm hover:border-primary/30 transition-colors">
-                          <div className="mt-0.5">
-                            <div className="w-5 h-5 rounded border border-outline flex items-center justify-center bg-surface cursor-pointer hover:border-primary"></div>
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="font-label-md text-label-md text-on-surface font-semibold">{doc}</h4>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {/* Optional Documents Section */}
-                {data.optionalDocuments?.length > 0 && (
-                  <section>
-                    <h3 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-4">
-                      <span className="material-symbols-outlined text-outline">add_circle</span>
-                      Optional Documents
-                    </h3>
-                    <div className="flex flex-col gap-3">
-                      {data.optionalDocuments.map((doc, i) => (
-                        <div key={i} className="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 flex gap-4 items-start shadow-sm hover:border-primary/30 transition-colors">
-                          <div className="mt-0.5">
-                            <div className="w-5 h-5 rounded border border-outline flex items-center justify-center bg-surface cursor-pointer hover:border-primary"></div>
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="font-label-md text-label-md text-on-surface font-semibold">{doc}</h4>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {/* AI Insights Grid (Bento style) */}
-                {(data.commonRejectionReasons?.length > 0 || data.tips?.length > 0) && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Rejection Reasons */}
-                    {data.commonRejectionReasons?.length > 0 && (
-                      <div className="bg-error-container/30 border border-error/20 rounded-xl p-4 flex flex-col gap-3">
-                        <h4 className="font-label-md text-label-md text-error flex items-center gap-2 font-bold">
-                          <span className="material-symbols-outlined text-[18px]">warning</span>
-                          Common Rejection Reasons
-                        </h4>
-                        <ul className="font-body-sm text-label-sm text-on-surface-variant space-y-2">
-                          {data.commonRejectionReasons.map((reason, i) => (
-                            <li key={i} className="flex items-start gap-2">
-                              <span className="material-symbols-outlined text-[14px] text-error mt-0.5">close</span>
-                              {reason}
-                            </li>
-                          ))}
-                        </ul>
+                  <div>
+                    <h2 className="font-display-lg text-headline-lg text-on-surface mb-1">{data.service}</h2>
+                  </div>
+                  {/* Info Pills */}
+                  {data.processingTime && (
+                    <div className="flex flex-wrap gap-3 mt-2">
+                      <div className="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-md border border-outline-variant/30">
+                        <span className="material-symbols-outlined text-outline text-[18px]">schedule</span>
+                        <span className="font-label-md text-label-md text-on-surface-variant">{data.processingTime}</span>
                       </div>
-                    )}
-                    {/* Helpful Tips */}
-                    {data.tips?.length > 0 && (
-                      <div className="bg-tertiary-container/10 border border-tertiary/20 rounded-xl p-4 flex flex-col gap-3">
-                        <h4 className="font-label-md text-label-md text-tertiary flex items-center gap-2 font-bold">
-                          <span className="material-symbols-outlined text-[18px]">lightbulb</span>
-                          Pro Tips
-                        </h4>
-                        <ul className="font-body-sm text-label-sm text-on-surface-variant space-y-2">
-                          {data.tips.map((tip, i) => (
-                            <li key={i} className="flex items-start gap-2">
-                              <span className="material-symbols-outlined text-[14px] text-tertiary mt-0.5">check</span>
-                              {tip}
-                            </li>
-                          ))}
-                        </ul>
+                    </div>
+                  )}
+                </div>
+                {/* Checklist Content */}
+                <div className="p-6 flex-1 overflow-y-auto flex flex-col gap-8">
+                  {/* Required Documents Section */}
+                  {data.requiredDocuments?.length > 0 && (
+                    <section>
+                      <h3 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-4">
+                        <span className="material-symbols-outlined text-error">asterisk</span>
+                        Mandatory Documents
+                      </h3>
+                      <div className="flex flex-col gap-3">
+                        {data.requiredDocuments.map((doc, i) => (
+                          <div key={i} className="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 flex gap-4 items-start shadow-sm hover:border-primary/30 transition-colors">
+                            <div className="mt-0.5">
+                              <div className="w-5 h-5 rounded border border-outline flex items-center justify-center bg-surface cursor-pointer hover:border-primary"></div>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-label-md text-label-md text-on-surface font-semibold">{doc}</h4>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </div>
-                )}
+                    </section>
+                  )}
 
-                {/* Action footer */}
-                {data.officialWebsite && (
-                  <div className="mt-auto pt-6 border-t border-outline-variant/20 flex justify-between items-center">
-                    <a
-                      className="text-primary font-label-md text-label-md hover:underline flex items-center gap-1"
-                      href={data.officialWebsite}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Visit Official Portal
-                      <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                    </a>
-                  </div>
-                )}
+                  {/* Optional Documents Section */}
+                  {data.optionalDocuments?.length > 0 && (
+                    <section>
+                      <h3 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2 mb-4">
+                        <span className="material-symbols-outlined text-outline">add_circle</span>
+                        Optional Documents
+                      </h3>
+                      <div className="flex flex-col gap-3">
+                        {data.optionalDocuments.map((doc, i) => (
+                          <div key={i} className="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 flex gap-4 items-start shadow-sm hover:border-primary/30 transition-colors">
+                            <div className="mt-0.5">
+                              <div className="w-5 h-5 rounded border border-outline flex items-center justify-center bg-surface cursor-pointer hover:border-primary"></div>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-label-md text-label-md text-on-surface font-semibold">{doc}</h4>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* AI Insights Grid (Bento style) */}
+                  {(data.commonRejectionReasons?.length > 0 || data.tips?.length > 0) && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Rejection Reasons */}
+                      {data.commonRejectionReasons?.length > 0 && (
+                        <div className="bg-error-container/30 border border-error/20 rounded-xl p-4 flex flex-col gap-3">
+                          <h4 className="font-label-md text-label-md text-error flex items-center gap-2 font-bold">
+                            <span className="material-symbols-outlined text-[18px]">warning</span>
+                            Common Rejection Reasons
+                          </h4>
+                          <ul className="font-body-sm text-label-sm text-on-surface-variant space-y-2">
+                            {data.commonRejectionReasons.map((reason, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="material-symbols-outlined text-[14px] text-error mt-0.5">close</span>
+                                {reason}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {/* Helpful Tips */}
+                      {data.tips?.length > 0 && (
+                        <div className="bg-tertiary-container/10 border border-tertiary/20 rounded-xl p-4 flex flex-col gap-3">
+                          <h4 className="font-label-md text-label-md text-tertiary flex items-center gap-2 font-bold">
+                            <span className="material-symbols-outlined text-[18px]">lightbulb</span>
+                            Pro Tips
+                          </h4>
+                          <ul className="font-body-sm text-label-sm text-on-surface-variant space-y-2">
+                            {data.tips.map((tip, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="material-symbols-outlined text-[14px] text-tertiary mt-0.5">check</span>
+                                {tip}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Action footer */}
+                  {data.officialWebsite && (
+                    <div className="mt-auto pt-6 border-t border-outline-variant/20 flex justify-between items-center">
+                      <a
+                        className="text-primary font-label-md text-label-md hover:underline flex items-center gap-1"
+                        href={data.officialWebsite}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Visit Official Portal
+                        <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}

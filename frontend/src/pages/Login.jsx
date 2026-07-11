@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import logo from "../assets/civicsathi-logo.png";
 
 export default function Login() {
-  const { user, login } = useAuth();
+  const { user, login, devLogin } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
@@ -53,7 +53,7 @@ export default function Login() {
             </div>
           )}
 
-          <div className="w-full pt-sm space-y-4">
+          <div className="w-full pt-sm space-y-2">
             <button
               onClick={handleLogin}
               className="w-full flex items-center justify-center gap-3 bg-surface border border-outline-variant hover:bg-surface-container-low hover:border-primary active:scale-[0.98] transition-all duration-200 rounded-lg py-3 px-4 shadow-sm text-on-surface font-label-md text-label-md"
@@ -66,6 +66,16 @@ export default function Login() {
               </svg>
               Continue with Google
             </button>
+
+            {import.meta.env.DEV && (
+              <button
+                onClick={devLogin}
+                className="w-full flex items-center justify-center gap-3 bg-secondary-container hover:bg-opacity-95 text-on-secondary-container active:scale-[0.98] transition-all duration-200 rounded-lg py-3 px-4 shadow-sm font-label-md text-label-md"
+              >
+                <span className="material-symbols-outlined text-[20px]">terminal</span>
+                Developer Bypass (Mock Sign In)
+              </button>
+            )}
           </div>
 
           <div className="pt-md w-full border-t border-outline-variant/30 mt-sm">

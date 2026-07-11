@@ -17,6 +17,7 @@ import Profile from "./pages/Profile";
 import ProfileSetup from "./pages/ProfileSetup";
 import CivicPath from "./pages/CivicPath";
 import MissionDashboard from "./pages/MissionDashboard";
+import SettingsModal from "./components/SettingsModal";
 
 export default function App() {
   // App serves as the main shell, setting up context providers for language configurations,
@@ -61,6 +62,7 @@ export default function App() {
             }
           />
         </Routes>
+        <SettingsModal />
       </BrowserRouter>
     </AuthProvider>
     </LanguageProvider>

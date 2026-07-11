@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import { ProfileAPI } from "../lib/endpoints";
 import logo from "../assets/civicsathi-logo.png";
 import Loader from "../components/Loader";
@@ -53,6 +54,14 @@ const INTEREST_OPTIONS = [
 export default function ProfileSetup() {
   const { user, profile, refreshProfile } = useAuth();
   const navigate = useNavigate();
+  const {
+    language,
+    changeLanguage,
+    theme,
+    changeTheme,
+    fontSize,
+    changeFontSize,
+  } = useLanguage();
 
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
@@ -133,7 +142,7 @@ export default function ProfileSetup() {
   };
 
   const handleNext = () => {
-    if (step < 5) {
+    if (step < 6) {
       setStep(step + 1);
     }
   };
@@ -165,7 +174,92 @@ export default function ProfileSetup() {
         return (
           <div className="space-y-4 animate-fadeIn">
             <h3 className="font-headline-md text-[20px] text-on-background font-semibold border-b border-outline-variant/30 pb-2">
-              Step 1: Basic Information
+              Step 1: Convenience Preferences
+            </h3>
+            <p className="font-label-sm text-label-sm text-on-surface-variant mb-4">
+              Set your default interface options. You can change these later at any time from Settings.
+            </p>
+
+            {/* Language Selection */}
+            <div className="space-y-2">
+              <label className="block font-label-md text-label-md text-on-surface-variant font-semibold">Language Preference</label>
+              <div className="flex gap-4">
+                {[
+                  { code: "en", label: "English" },
+                  { code: "hi", label: "हिन्दी (Hindi)" }
+                ].map((opt) => (
+                  <label key={opt.code} className="flex items-center gap-2 cursor-pointer text-on-surface">
+                    <input
+                      type="radio"
+                      name="langPref"
+                      value={opt.code}
+                      checked={language === opt.code}
+                      onChange={() => changeLanguage(opt.code)}
+                      className="w-4 h-4 text-primary focus:ring-primary border-outline-variant"
+                    />
+                    <span className="font-body-md text-body-md">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Theme Selection */}
+            <div className="space-y-2">
+              <label className="block font-label-md text-label-md text-on-surface-variant font-semibold">Visual Theme</label>
+              <div className="flex gap-4">
+                {[
+                  { code: "light", label: "Light Mode", icon: "light_mode" },
+                  { code: "dark", label: "Dark Mode", icon: "dark_mode" }
+                ].map((opt) => (
+                  <label key={opt.code} className="flex items-center gap-2 cursor-pointer text-on-surface">
+                    <input
+                      type="radio"
+                      name="themePref"
+                      value={opt.code}
+                      checked={theme === opt.code}
+                      onChange={() => changeTheme(opt.code)}
+                      className="w-4 h-4 text-primary focus:ring-primary border-outline-variant"
+                    />
+                    <span className="font-body-md text-body-md flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[16px]">{opt.icon}</span>
+                      {opt.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Font Size Selection */}
+            <div className="space-y-2">
+              <label className="block font-label-md text-label-md text-on-surface-variant font-semibold">Text Size</label>
+              <div className="flex gap-4">
+                {[
+                  { size: "small", label: "Small" },
+                  { size: "normal", label: "Normal" },
+                  { size: "large", label: "Large" },
+                  { size: "xlarge", label: "Extra Large" }
+                ].map((opt) => (
+                  <label key={opt.size} className="flex items-center gap-2 cursor-pointer text-on-surface">
+                    <input
+                      type="radio"
+                      name="fontSizePref"
+                      value={opt.size}
+                      checked={fontSize === opt.size}
+                      onChange={() => changeFontSize(opt.size)}
+                      className="w-4 h-4 text-primary focus:ring-primary border-outline-variant"
+                    />
+                    <span className="font-body-md text-body-md">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="space-y-4 animate-fadeIn">
+            <h3 className="font-headline-md text-[20px] text-on-background font-semibold border-b border-outline-variant/30 pb-2">
+              Step 2: Basic Information
             </h3>
             
             <div className="space-y-1">
@@ -233,7 +327,7 @@ export default function ProfileSetup() {
             </div>
           </div>
         );
-      case 2:
+      case 3:
         return (
           <div className="space-y-4 animate-fadeIn">
             <h3 className="font-headline-md text-[20px] text-on-background font-semibold border-b border-outline-variant/30 pb-2">
@@ -290,7 +384,7 @@ export default function ProfileSetup() {
             </div>
           </div>
         );
-      case 3:
+      case 4:
         return (
           <div className="space-y-4 animate-fadeIn">
             <h3 className="font-headline-md text-[20px] text-on-background font-semibold border-b border-outline-variant/30 pb-2">
@@ -330,7 +424,7 @@ export default function ProfileSetup() {
             </div>
           </div>
         );
-      case 4:
+      case 5:
         return (
           <div className="space-y-4 animate-fadeIn">
             <h3 className="font-headline-md text-[20px] text-on-background font-semibold border-b border-outline-variant/30 pb-2">
@@ -401,11 +495,11 @@ export default function ProfileSetup() {
             </div>
           </div>
         );
-      case 5:
+      case 6:
         return (
           <div className="space-y-4 animate-fadeIn">
             <h3 className="font-headline-md text-[20px] text-on-background font-semibold border-b border-outline-variant/30 pb-2">
-              Step 5: Select Your Interests
+              Step 6: Select Your Interests
             </h3>
             <p className="font-label-sm text-label-sm text-on-surface-variant">
               Select key focus areas for government schemes, scholarships, and updates you want to track.
@@ -519,7 +613,7 @@ export default function ProfileSetup() {
                 </button>
               )}
 
-              {step < 5 ? (
+              {step < 6 ? (
                 <button
                   onClick={handleNext}
                   className="px-6 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary/95 transition-colors active:scale-95 flex items-center gap-1 shadow-sm"

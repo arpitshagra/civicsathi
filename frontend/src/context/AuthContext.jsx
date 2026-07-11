@@ -52,12 +52,30 @@ export function AuthProvider({ children }) {
 
   // Launches Google Single Sign-On pop-up authentication window.
   const login = () => signInWithPopup(auth, googleProvider);
+
+  // Bypasses Firebase OAuth popup by setting a mock client user in local dev.
+  const devLogin = () => {
+    const mockUser = {
+      uid: "dev-user",
+      email: "dev@civicsathi.local",
+      displayName: "Development User",
+      photoURL: null,
+      getIdToken: async () => "mock-dev-token",
+    };
+    setUser(mockUser);
+    setProfile({
+      uid: "dev-user",
+      email: "dev@civicsathi.local",
+      displayName: "Development User",
+    });
+  };
   
   // Terminates the active Firebase session.
   const logout = () => signOut(auth);
 
   // Returns a fresh Firebase ID token (auto-refreshes behind the scenes) or null when signed out.
   const getToken = async () => {
+    if (user && user.uid === "dev-user") return "mock-dev-token";
     if (!auth.currentUser) return null;
     return auth.currentUser.getIdToken();
   };
@@ -65,7 +83,7 @@ export function AuthProvider({ children }) {
   const refreshProfile = () => fetchProfile(auth.currentUser);
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, profileLoading, login, logout, getToken, refreshProfile }}>
+    <AuthContext.Provider value={{ user, profile, loading, profileLoading, login, devLogin, logout, getToken, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

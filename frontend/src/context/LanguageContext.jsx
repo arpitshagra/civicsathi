@@ -115,6 +115,18 @@ const TRANSLATIONS = {
     ctaTitle: "Remove the Confusion from Government Services",
     ctaDesc: "Sign in with Google today to save chats, list eligible schemes, monitor complaint status, and generate custom checklists.",
     seeFeatures: "See Features",
+
+    // Settings & Convenience Preferences
+    settingsTitle: "Convenience Preferences",
+    themeLabel: "Visual Theme",
+    lightMode: "Light Mode",
+    darkMode: "Dark Mode",
+    fontSizeLabel: "Text Size",
+    fontSizeSmall: "Small",
+    fontSizeNormal: "Normal",
+    fontSizeLarge: "Large",
+    fontSizeXLarge: "Extra Large",
+    closeBtn: "Close & Save",
   },
   hi: {
     // Navigation
@@ -227,11 +239,29 @@ const TRANSLATIONS = {
     ctaTitle: "सरकारी सेवाओं की उलझन को दूर करें",
     ctaDesc: "चैट सहेजने, पात्र योजनाओं की सूची देखने, शिकायतों की स्थिति जांचने और कस्टम दस्तावेज़ चेकलिस्ट बनाने के लिए आज ही गूगल से लॉगिन करें।",
     seeFeatures: "विशेषताएं देखें",
+
+    // Settings & Convenience Preferences
+    settingsTitle: "सुविधा प्राथमिकताएं",
+    themeLabel: "दृश्य थीम",
+    lightMode: "लाइट मोड",
+    darkMode: "डार्क मोड",
+    fontSizeLabel: "पाठ का आकार",
+    fontSizeSmall: "छोटा",
+    fontSizeNormal: "सामान्य",
+    fontSizeLarge: "बड़ा",
+    fontSizeXLarge: "बहुत बड़ा",
+    closeBtn: "बंद करें और सहेजें",
   }
 };
 
 export function LanguageProvider({ children }) {
   const [language, setLangState] = useState(getLanguage());
+  // Theme state synced with localStorage, default to 'light'
+  const [theme, setThemeState] = useState(localStorage.getItem("app-theme") || "light");
+  // Font size selection state, defaults to 'normal'
+  const [fontSize, setFontSizeState] = useState(localStorage.getItem("app-font-size") || "normal");
+  // Globally controls whether the preferences configuration overlay is active
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
@@ -240,12 +270,60 @@ export function LanguageProvider({ children }) {
     window.dispatchEvent(new Event("languageChanged"));
   };
 
+  const changeTheme = (newTheme) => {
+    localStorage.setItem("app-theme", newTheme);
+    setThemeState(newTheme);
+  };
+
+  const changeFontSize = (newSize) => {
+    localStorage.setItem("app-font-size", newSize);
+    setFontSizeState(newSize);
+  };
+
+  // Sync Tailwind class name selectors to html tag base node
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+      root.classList.remove("light");
+    } else {
+      root.classList.add("light");
+      root.classList.remove("dark");
+    }
+  }, [theme]);
+
+  // Dynamically resize base HTML rem layouts based on user size settings
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const sizes = {
+      small: "14px",
+      normal: "16px",
+      large: "18px",
+      xlarge: "20px"
+    };
+    root.style.fontSize = sizes[fontSize] || "16px";
+  }, [fontSize]);
+
+  const openSettings = () => setIsSettingsOpen(true);
+  const closeSettings = () => setIsSettingsOpen(false);
+
   const t = (key) => {
     return TRANSLATIONS[language]?.[key] || TRANSLATIONS["en"]?.[key] || key;
   };
 
   return (
-    <LanguageContext.Provider value={{ language, changeLanguage, t }}>
+    <LanguageContext.Provider value={{ 
+      language, 
+      changeLanguage, 
+      theme, 
+      changeTheme, 
+      fontSize, 
+      changeFontSize, 
+      isSettingsOpen, 
+      openSettings, 
+      closeSettings, 
+      t 
+    }}>
       {children}
     </LanguageContext.Provider>
   );
