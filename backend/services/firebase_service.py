@@ -185,7 +185,7 @@ def list_by_user(
         query = base.order_by(order_by, direction=direction)
         if limit:
             query = query.limit(limit)
-        docs = query.stream()
+        docs = list(query.stream())  # Eager evaluation to catch lazy query/index exceptions
     except Exception as exc:  # noqa: BLE001 - missing index / field
         logger.warning(
             "Ordered query on %s failed (%s); falling back to unordered.",
@@ -193,7 +193,7 @@ def list_by_user(
             exc,
         )
         query = base.limit(limit) if limit else base
-        docs = query.stream()
+        docs = list(query.stream())
 
     results = []
     for snap in docs:
