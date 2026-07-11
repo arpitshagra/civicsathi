@@ -80,7 +80,7 @@ export function AuthProvider({ children }) {
     return auth.currentUser.getIdToken();
   };
 
-  const refreshProfile = () => fetchProfile(auth.currentUser);
+  const refreshProfile = () => fetchProfile(user);
 
   return (
     <AuthContext.Provider value={{ user, profile, loading, profileLoading, login, devLogin, logout, getToken, refreshProfile }}>

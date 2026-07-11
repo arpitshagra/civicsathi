@@ -75,7 +75,7 @@ export default function Dashboard() {
   // Queries dashboard count aggregates and recent logs summary
   const { data, loading, error, run } = useApi(DashboardAPI.summary);
   const [query, setQuery] = useState("");
-  const { t } = useLanguage();
+  const { t, openSettings } = useLanguage();
 
   useEffect(() => {
     // Triggers counts aggregation on load
