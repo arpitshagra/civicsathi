@@ -248,7 +248,8 @@ def consume_free_request(uid: str, limit: int) -> dict:
     """Atomically consume one free AI request for a user.
 
     Uses a Firestore transaction to read the current request count, increment it if it's
-    under the limit, or return false if the limit is reached.
+    under the limit, or return false if the limit is reached. Supports a user-specific
+    'customLimit' field override in Firestore.
     """
     db = _require_db()
     ref = db.collection("users").document(uid)
@@ -258,9 +259,18 @@ def consume_free_request(uid: str, limit: int) -> dict:
     def consume(transaction):
         snapshot = ref.get(transaction=transaction)
         data = snapshot.to_dict() or {}
+        
+        # Override the global limit if a customLimit is set on this specific user
+        user_limit = data.get("customLimit", limit)
+        if not isinstance(user_limit, int):
+            try:
+                user_limit = int(user_limit)
+            except (ValueError, TypeError):
+                user_limit = limit
+
         used = int(data.get("freeRequestCount", 0))
-        if used >= limit:
-            return {"allowed": False, "used": used, "remaining": 0, "limit": limit}
+        if used >= user_limit:
+            return {"allowed": False, "used": used, "remaining": 0, "limit": user_limit}
 
         used += 1
         transaction.set(
@@ -275,8 +285,8 @@ def consume_free_request(uid: str, limit: int) -> dict:
         return {
             "allowed": True,
             "used": used,
-            "remaining": max(limit - used, 0),
-            "limit": limit,
+            "remaining": max(user_limit - used, 0),
+            "limit": user_limit,
         }
 
     return consume(transaction)
