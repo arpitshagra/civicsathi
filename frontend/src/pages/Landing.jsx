@@ -200,60 +200,50 @@ export default function Landing() {
 
       {/* Main Content Canvas */}
       <main className="flex-grow">
-        {/* Premium Dark Hero Section */}
-        <section className="relative pt-32 pb-24 px-gutter md:px-margin-desktop overflow-hidden flex flex-col items-center justify-center min-h-[95vh] bg-[#070b19] text-white">
-          {/* Subtle Grid Overlay and Glowing Ambient Lights */}
-          <div className="absolute inset-0 z-0 opacity-[0.12] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#5c9dff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
-          <div className="absolute top-[-20%] left-[-20%] w-[60vw] h-[60vw] rounded-full bg-primary/20 blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-secondary-container/10 blur-[100px] pointer-events-none" />
+        {/* Light Minimalist Hero Section */}
+        <section className="hero-gradient relative pt-24 pb-20 px-gutter md:px-margin-desktop overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
+          {/* Subtle Grid Overlay */}
+          <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#003d9b 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
           
           <div className="max-w-5xl mx-auto text-center z-10 space-y-md relative">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[#6ea3ff] font-label-sm text-label-sm mb-2 shadow-xl backdrop-blur-md">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5c9dff] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5c9dff]"></span>
-              </span>
-              {t("introducingTitle")}
-            </div>
-            
-            <h1 className="font-display-lg text-display-lg text-white tracking-tight leading-[1.15] max-w-4xl mx-auto">
+            <h1 className="font-display-lg text-display-lg text-on-background tracking-tight leading-[1.1] max-w-4xl mx-auto pt-4">
               {t("heroTitleLine1")} <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4d8eff] via-[#85b2ff] to-[#a28eff]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary-container to-secondary-container">
                 {t("heroTitleLine2")}
               </span>
             </h1>
             
-            <p className="font-body-lg text-body-lg text-slate-300 max-w-3xl mx-auto leading-relaxed pt-2">
+            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mx-auto leading-relaxed pt-2">
               {t("heroSubtext")}
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-6">
-              <Link to="/login" className="w-full sm:w-auto bg-[#4d8eff] text-white px-8 py-3.5 rounded-lg font-label-md text-label-md hover:bg-[#3b7cee] transition-all shadow-lg hover:shadow-[#4d8eff]/20 hover:scale-[1.02] transform active:scale-95 flex items-center justify-center gap-2">
+              <Link to="/login" className="w-full sm:w-auto bg-primary text-on-primary px-8 py-3.5 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-all shadow-md hover:shadow-lg transform active:scale-95 flex items-center justify-center gap-2">
                 {t("startForFree")}
                 <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </Link>
-              <button onClick={() => scrollToSection("interactive-demo")} className="w-full sm:w-auto bg-white/5 text-slate-200 border border-white/10 px-8 py-3.5 rounded-lg font-label-md text-label-md hover:bg-white/10 transition-all hover:scale-[1.02] transform active:scale-95 flex items-center justify-center gap-2 shadow-sm backdrop-blur-md">
+              <button onClick={() => scrollToSection("interactive-demo")} className="w-full sm:w-auto bg-white text-primary border border-outline-variant px-8 py-3.5 rounded-lg font-label-md text-label-md hover:bg-surface-container-low hover:border-outline transition-all transform active:scale-95 flex items-center justify-center gap-2 shadow-sm">
                 {t("tryLiveDemo")}
               </button>
             </div>
             
-            <p className="font-label-sm text-label-sm text-slate-400/80 pt-2">
+            <p className="font-label-sm text-label-sm text-on-surface-variant/80 pt-2">
               {t("heroBottomNotes")}
             </p>
           </div>
 
           {/* Interactive Playground / Live Preview Container */}
           <div id="interactive-demo" className="mt-16 w-full max-w-4xl z-10 relative scroll-mt-28">
-            <div className="absolute -inset-1.5 bg-gradient-to-r from-[#4d8eff]/30 to-[#a28eff]/30 rounded-2xl blur-xl opacity-75"></div>
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-primary/30 to-secondary-container/30 rounded-2xl blur-xl opacity-85"></div>
             
-            <div className="bg-[#0b122c]/85 rounded-2xl border border-white/10 relative overflow-hidden shadow-2xl flex flex-col min-h-[500px] backdrop-blur-xl">
+            <div className="ai-glass-card rounded-2xl border border-white/60 relative overflow-hidden shadow-2xl flex flex-col min-h-[500px]">
               {/* Header Tab Panel */}
-              <div className="border-b border-white/10 bg-[#070b1c]/60 p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="border-b border-surface-variant/60 bg-surface-container/40 p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-2.5">
-                  <span className="material-symbols-outlined text-[#4d8eff] text-[28px] animate-pulse">smart_toy</span>
+                  <span className="material-symbols-outlined text-primary text-[28px] ai-pulse">smart_toy</span>
                   <div className="text-left">
-                    <h3 className="font-headline-md text-[16px] text-white font-semibold">{t("sandboxTitle")}</h3>
-                    <p className="text-xs text-slate-400">{t("sandboxSubtitle")}</p>
+                    <h3 className="font-headline-md text-[16px] text-on-surface font-semibold">{t("sandboxTitle")}</h3>
+                    <p className="text-xs text-on-surface-variant">{t("sandboxSubtitle")}</p>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2 w-full sm:w-auto">
@@ -261,8 +251,8 @@ export default function Landing() {
                     onClick={() => setActiveSim("passport")}
                     className={`px-4 py-2 rounded-lg font-label-md text-xs transition-all ${
                       activeSim === "passport"
-                        ? "bg-[#4d8eff] text-white shadow-md shadow-[#4d8eff]/20"
-                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                        ? "bg-primary text-on-primary shadow-sm"
+                        : "bg-surface-container-high text-on-surface-variant hover:bg-surface-variant/80"
                     }`}
                   >
                     {language === "hi" ? "नया पासपोर्ट" : "Fresh Passport"}
@@ -271,8 +261,8 @@ export default function Landing() {
                     onClick={() => setActiveSim("kisan")}
                     className={`px-4 py-2 rounded-lg font-label-md text-xs transition-all ${
                       activeSim === "kisan"
-                        ? "bg-[#4d8eff] text-white shadow-md shadow-[#4d8eff]/20"
-                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                        ? "bg-primary text-on-primary shadow-sm"
+                        : "bg-surface-container-high text-on-surface-variant hover:bg-surface-variant/80"
                     }`}
                   >
                     {language === "hi" ? "पीएम-किसान योजना" : "PM-Kisan Scheme"}
@@ -281,8 +271,8 @@ export default function Landing() {
                     onClick={() => setActiveSim("complaint")}
                     className={`px-4 py-2 rounded-lg font-label-md text-xs transition-all ${
                       activeSim === "complaint"
-                        ? "bg-[#4d8eff] text-white shadow-md shadow-[#4d8eff]/20"
-                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                        ? "bg-primary text-on-primary shadow-sm"
+                        : "bg-surface-container-high text-on-surface-variant hover:bg-surface-variant/80"
                     }`}
                   >
                     {language === "hi" ? "सड़क के गड्ढे की शिकायत" : "Road Pothole Complaint"}
@@ -295,38 +285,38 @@ export default function Landing() {
                 <div className="space-y-6">
                   {/* User Question */}
                   <div className="flex gap-4 justify-end">
-                    <div className="bg-[#4d8eff]/10 text-[#7bb0ff] border border-[#4d8eff]/20 rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%] shadow-sm">
+                    <div className="bg-primary/10 text-primary border border-primary/20 rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%] shadow-sm">
                       <p className="text-sm font-medium">{currentSimData.query}</p>
                     </div>
-                    <div className="h-9 w-9 rounded-full bg-[#4d8eff]/20 flex items-center justify-center text-[#4d8eff] font-bold text-sm shrink-0 border border-[#4d8eff]/10">
+                    <div className="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">
                       {language === "hi" ? "आप" : "You"}
                     </div>
                   </div>
 
                   {/* AI Response Stream */}
                   <div className="flex gap-4">
-                    <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold text-sm shrink-0 border border-white/10">
+                    <div className="h-9 w-9 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary font-bold text-sm shrink-0 border border-secondary-container/50">
                       {language === "hi" ? "एआई" : "AI"}
                     </div>
-                    <div className="bg-white/[0.03] rounded-2xl rounded-tl-none border border-white/10 p-5 max-w-[85%] shadow-lg space-y-4 text-slate-200">
+                    <div className="bg-white rounded-2xl rounded-tl-none border border-outline-variant/60 p-5 max-w-[85%] shadow-sm space-y-4 text-on-surface">
                       {/* Typing indicator or Typewriter body */}
                       <div>
-                        <p className="text-sm leading-relaxed whitespace-pre-line text-slate-200">
+                        <p className="text-sm leading-relaxed whitespace-pre-line text-on-surface">
                           {typedText}
-                          {isTyping && <span className="inline-block w-1.5 h-4 ml-1 bg-[#4d8eff] animate-pulse">|</span>}
+                          {isTyping && <span className="inline-block w-1.5 h-4 ml-1 bg-primary animate-pulse">|</span>}
                         </p>
                       </div>
 
                       {/* Structured Details Box - Shows only after typing completes */}
                       {showResult && (
-                        <div className="pt-4 border-t border-white/10 space-y-4 animate-fade-in">
+                        <div className="pt-4 border-t border-surface-variant/50 space-y-4 animate-fade-in">
                           {/* Stepper Steps */}
                           <div className="space-y-3">
-                            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#4d8eff]">{t("sandboxRequiredActionPlan")}</h4>
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-primary">{t("sandboxRequiredActionPlan")}</h4>
                             <ol className="space-y-2.5">
                               {currentSimData.steps.map((step, idx) => (
-                                <li key={idx} className="flex gap-3 text-xs text-slate-300">
-                                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#4d8eff]/20 text-[#4d8eff] font-bold text-[10px] border border-[#4d8eff]/20">
+                                <li key={idx} className="flex gap-3 text-xs text-on-surface-variant">
+                                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-[10px] border border-primary/20">
                                     {idx + 1}
                                   </span>
                                   <span>{step}</span>
@@ -336,15 +326,15 @@ export default function Landing() {
                           </div>
 
                           {/* Document Checklist Snippet */}
-                          <div className="space-y-2 bg-white/[0.02] rounded-xl p-4 border border-white/5">
-                            <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+                          <div className="space-y-2 bg-surface-container-low rounded-xl p-4 border border-outline-variant/50">
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-tertiary flex items-center gap-1.5">
                               <span className="material-symbols-outlined text-[16px]">check_box</span>
                               {t("sandboxDocChecklist")}
                             </h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                               {currentSimData.docs.map((doc, idx) => (
-                                <div key={idx} className="flex items-center gap-2 text-xs text-slate-300">
-                                  <span className="material-symbols-outlined text-teal-400 text-[16px]">verified</span>
+                                <div key={idx} className="flex items-center gap-2 text-xs text-on-surface-variant">
+                                  <span className="material-symbols-outlined text-tertiary text-[16px]">verified</span>
                                   <span>{doc}</span>
                                 </div>
                               ))}
@@ -354,23 +344,23 @@ export default function Landing() {
                           {/* Portal & Timelines Banner */}
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-2 text-xs">
                             <div className="flex flex-wrap items-center gap-2">
-                              <span className="font-medium text-slate-400">{t("sandboxOfficialPortal")}</span>
+                              <span className="font-medium text-on-surface-variant">{t("sandboxOfficialPortal")}</span>
                               <a
                                 href={currentSimData.portal.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-[#4d8eff] hover:underline flex items-center gap-0.5 font-semibold"
+                                className="text-primary hover:underline flex items-center gap-0.5 font-semibold"
                               >
                                 {currentSimData.portal.name}
                                 <span className="material-symbols-outlined text-[12px]">open_in_new</span>
                               </a>
                             </div>
                             <div className="flex items-center gap-3">
-                              <span className="px-2.5 py-1 bg-white/5 rounded-full font-medium text-slate-300 border border-white/5 flex items-center gap-1">
+                              <span className="px-2.5 py-1 bg-surface-container-high rounded-full font-medium text-on-surface-variant border border-outline-variant/20 flex items-center gap-1">
                                 <span className="material-symbols-outlined text-[14px]">schedule</span>
                                 {currentSimData.time}
                               </span>
-                              <span className="px-2.5 py-1 bg-teal-500/10 text-teal-400 border border-teal-500/20 rounded-full font-semibold flex items-center gap-1">
+                              <span className="px-2.5 py-1 bg-tertiary-container/10 text-tertiary border border-tertiary-container/30 rounded-full font-semibold flex items-center gap-1">
                                 <span className="material-symbols-outlined text-[14px]">bolt</span>
                                 {currentSimData.confidence}% {language === "hi" ? "सटीकता" : "Match"}
                               </span>
@@ -383,12 +373,12 @@ export default function Landing() {
                 </div>
 
                 {/* Simulated Input box */}
-                <div className="border-t border-white/10 pt-4 flex gap-2">
-                  <div className="flex-grow bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-slate-400 flex items-center gap-2 shadow-inner">
-                    <span className="material-symbols-outlined text-slate-400 text-[18px]">search</span>
+                <div className="border-t border-surface-variant/40 pt-4 flex gap-2">
+                  <div className="flex-grow bg-white border border-outline-variant/60 rounded-xl px-4 py-3 text-xs text-on-surface-variant/80 flex items-center gap-2 shadow-inner">
+                    <span className="material-symbols-outlined text-outline text-[18px]">search</span>
                     <span>{t("sandboxInputText")}</span>
                   </div>
-                  <Link to="/login" className="bg-[#4d8eff] text-white px-6 py-3 rounded-xl text-xs font-label-md hover:bg-[#3b7cee] shadow-md flex items-center gap-1.5 shrink-0 transition-colors">
+                  <Link to="/login" className="bg-primary text-on-primary px-6 py-3 rounded-xl text-xs font-label-md hover:bg-primary-container shadow-md flex items-center gap-1.5 shrink-0 transition-colors">
                     <span>{t("sandboxButtonTryQuery")}</span>
                     <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
                   </Link>
