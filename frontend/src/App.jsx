@@ -19,6 +19,10 @@ import CivicPath from "./pages/CivicPath";
 import MissionDashboard from "./pages/MissionDashboard";
 import SettingsModal from "./components/SettingsModal";
 
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import ContactSupport from "./pages/ContactSupport";
+
 export default function App() {
   // App serves as the main shell, setting up context providers for language configurations,
   // Firebase authentication states, browser routers, and route-level protection middleware.
@@ -31,6 +35,9 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/support" element={<ContactSupport />} />
 
           {/* Protected Routes — Wires the <ProtectedRoute> gate to intercept calls.
               Shares the <Layout /> wrapper which renders the main sidebar navigation menu. */}

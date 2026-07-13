@@ -634,9 +634,9 @@ export default function Landing() {
             <span className="font-label-sm text-label-sm text-on-surface-variant">&copy; 2026 CivicSathi AI. Crafted by Arpit Sharma. All rights reserved.</span>
           </div>
           <div className="flex gap-6">
-            <a className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
-            <a className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
-            <a className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+            <Link className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" to="/privacy">Privacy Policy</Link>
+            <Link className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" to="/terms">Terms of Service</Link>
+            <Link className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" to="/support">Contact Support</Link>
           </div>
         </div>
       </footer>
